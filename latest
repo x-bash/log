@@ -4,13 +4,13 @@
 # Section: log main
 ___x_cmd_log() {
     if [ $# -eq 0 ]; then
-        ___x_cmd_log_help
-        return 1
+        ___x_cmd_log -h
+        return
     fi
 
-    local level_code=0
 
     case "$1" in
+        help|-H|-h|--help)      ___x_cmd_log_help; return 1 ;;
         init)           shift; ___x_cmd_log_init "$@"; return ;;
         timestamp)
             case "$2" in
@@ -26,6 +26,7 @@ ___x_cmd_log() {
     esac
 
     local level
+    local level_code
     local var
     while [ $# -ne 0 ]; do
         case "$1" in

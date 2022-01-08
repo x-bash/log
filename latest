@@ -1,4 +1,4 @@
-# shellcheck shell=sh disable=SC3043
+# shellcheck shell=sh disable=SC3043 # xrc
 # author:       Li Junhao           l@x-cmd.com
 
 # Section: log main
@@ -168,3 +168,5 @@ ___x_cmd_log_completer(){
 }
 # EndSection
 
+
+xrc srcmain ___x_cmd_log

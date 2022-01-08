@@ -4,27 +4,8 @@
 # Section: log main
 ___x_cmd_log() {
     if [ $# -eq 0 ]; then
-        cat >&2 <<A
-x log     log control facility
-    Usage:
-        x log init [ module ]
-        x log [... +module | -module | module/log-level ]
-Subcommand:
-    init <module>:                  Generate function '<module>_log'
-    timestamp < on | off | <format> >:
-                                    off, default setting. shutdown the timestamp output in log
-                                    on, default format is +%H:%M:%S
-                                    <format>, customized timestamp format like "+%H:%M:%S", "+%m/%d-%H:%M:%S"
-Example:
-    Enable debug log for module json:
-            x log +json          or   x log json
-            x log json/verbose   or   x log json/v
-            x log json/debug     or   x log json/d
-    Dsiable debug log for module json:
-            x log -json
-            x log json/info
-A
-                    return 1
+        ___x_cmd_log_help
+        return 1
     fi
     local var
     local level_code=0
@@ -110,6 +91,30 @@ ___x_cmd_log_init(){
             alias "${logger_name}:${level_alias}"=" : # "
         fi
     done
+}
+
+___x_cmd_log_help(){
+    cat >&2 <<A
+x log     log control facility
+    Usage:
+        x log init [ module ]
+        x log [... +module | -module | module/log-level ]
+Subcommand:
+    init <module>:                  Generate function '<module>_log'
+    timestamp < on | off | <format> >:
+                                    off, default setting. shutdown the timestamp output in log
+                                    on, default format is +%H:%M:%S
+                                    <format>, customized timestamp format like "+%H:%M:%S", "+%m/%d-%H:%M:%S"
+Example:
+    Enable debug log for module json:
+            x log +json          or   x log json
+            x log json/verbose   or   x log json/v
+            x log json/debug     or   x log json/d
+    Dsiable debug log for module json:
+            x log -json
+            x log json/info
+A
+
 }
 
 # Section: logger

@@ -77,11 +77,13 @@ ___x_cmd_log_set_level(){
     local level_name
     local on=
     for level_name in debug info warn error; do
+        echo "$level_name" = "$level"
         [ "$level_name" = "$level" ] && on=1
+        echo "$level_name" = "$level $on"
         if [ -z "$on" ]; then
-            alias "${logger_name}:${level_alias}"=" : # "
+            alias "${logger_name}:${level_name}"=" : # "
         else
-            alias "${logger_name}:${level_alias}"="${logger_name}_log ${level_alias}"
+            alias "${logger_name}:${level_name}"="${logger_name}_log ${level_name}"
         fi
     done
 

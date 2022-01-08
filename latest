@@ -47,7 +47,7 @@ ___x_cmd_logger(){
 # EndSection
 
 
-# Section: logctl consider extracting it into individual repository
+# Section: log main
 ___x_cmd_log() {
     if [ $# -eq 0 ]; then
         cat >&2 <<A

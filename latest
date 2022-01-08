@@ -125,6 +125,7 @@ A
 }
 # EndSection
 
+# Section: completer, Maybe we can use advise.json to replace it for advise module can support the following function.
 # shellcheck disable=SC3010,SC2154
 ___x_cmd_log_completer(){
 
@@ -165,4 +166,5 @@ ___x_cmd_log_completer(){
             ;;
     esac
 }
+# EndSection
 

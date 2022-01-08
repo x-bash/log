@@ -1,52 +1,5 @@
 # shellcheck shell=sh disable=SC3043
 
-# Section: log
-# TODO: To move xrc_log
-XRC_LOG_COLOR=1
-XRC_LOG_TIMESTAMP=      # "+%H:%M:%S"      # Enable Timestamp.
-
-# TODO: rename to ___x_cmd_log_logger
-___x_cmd_logger(){
-    local logger="${O:-DEFAULT}"
-    local IFS=
-    local level="${1:?Please provide logger level}"
-    local FLAG_NAME=${FLAG_NAME:?WRONG}
-
-    local color="\e[32;2m"
-    local level_code=0
-    case "$level" in
-        debug|DEBUG|verbose)    level="DBG";    shift ;;
-        info|INFO)              level="INF";    level_code=1;   color="\e[36m";     shift ;;
-        warn|WARN)              level="WRN";    level_code=2;   color="\e[33m";     shift ;;
-        error|ERROR)            level="ERR";    level_code=3;   color="\e[31m";     shift ;;
-        *)                      level="DBG"     ;;
-    esac
-
-    eval "[ $level_code -lt \"\${$FLAG_NAME:-1}\" ]" && return 0
-
-    local timestamp=
-    [ -n "$XRC_LOG_TIMESTAMP" ] && timestamp=" [$(date "${XRC_LOG_TIMESTAMP}")]"
-
-    if [ -n "$XRC_LOG_COLOR" ]; then
-
-        if [ $# -eq 0 ]; then
-            printf "${color}%s[%s]${timestamp}: " "$logger" "$level"
-            cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; END{ printf("%s", "\033[0m"); }'
-        else
-            printf "${color}%s[%s]${timestamp}: %s\e[0m\n" "$logger" "$level" "$*"
-        fi
-    else
-        if [ $# -eq 0 ]; then
-            printf "%s[%s]${timestamp}: " "$logger" "$level"
-            cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; }'
-        else
-            printf "%s[%s]${timestamp}: %s\n" "$logger" "$level" "$*"
-        fi
-    fi >&2
-}
-# EndSection
-
-
 # Section: log main
 ___x_cmd_log() {
     if [ $# -eq 0 ]; then
@@ -122,6 +75,52 @@ A
         esac
         shift
     done
+}
+# EndSection
+
+# Section: logger
+# TODO: To move xrc_log
+XRC_LOG_COLOR=1
+XRC_LOG_TIMESTAMP=      # "+%H:%M:%S"      # Enable Timestamp.
+
+# TODO: rename to ___x_cmd_log_logger
+___x_cmd_logger(){
+    local logger="${O:-DEFAULT}"
+    local IFS=
+    local level="${1:?Please provide logger level}"
+    local FLAG_NAME=${FLAG_NAME:?WRONG}
+
+    local color="\e[32;2m"
+    local level_code=0
+    case "$level" in
+        debug|DEBUG|verbose)    level="DBG";    shift ;;
+        info|INFO)              level="INF";    level_code=1;   color="\e[36m";     shift ;;
+        warn|WARN)              level="WRN";    level_code=2;   color="\e[33m";     shift ;;
+        error|ERROR)            level="ERR";    level_code=3;   color="\e[31m";     shift ;;
+        *)                      level="DBG"     ;;
+    esac
+
+    eval "[ $level_code -lt \"\${$FLAG_NAME:-1}\" ]" && return 0
+
+    local timestamp=
+    [ -n "$XRC_LOG_TIMESTAMP" ] && timestamp=" [$(date "${XRC_LOG_TIMESTAMP}")]"
+
+    if [ -n "$XRC_LOG_COLOR" ]; then
+
+        if [ $# -eq 0 ]; then
+            printf "${color}%s[%s]${timestamp}: " "$logger" "$level"
+            cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; END{ printf("%s", "\033[0m"); }'
+        else
+            printf "${color}%s[%s]${timestamp}: %s\e[0m\n" "$logger" "$level" "$*"
+        fi
+    else
+        if [ $# -eq 0 ]; then
+            printf "%s[%s]${timestamp}: " "$logger" "$level"
+            cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; }'
+        else
+            printf "%s[%s]${timestamp}: %s\n" "$logger" "$level" "$*"
+        fi
+    fi >&2
 }
 # EndSection
 

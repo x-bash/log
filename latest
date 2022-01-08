@@ -7,7 +7,7 @@ ___x_cmd_log() {
         ___x_cmd_log_help
         return 1
     fi
-    local var
+
     local level_code=0
 
     case "$1" in
@@ -26,17 +26,20 @@ ___x_cmd_log() {
     esac
 
     local level
+    local var
     while [ $# -ne 0 ]; do
         case "$1" in
-            -*) var="XRC_LOG_LEVEL_${1#-}"
-                eval "$var=1"
-                O=$i FLAG_NAME=$var ___x_cmd_logger info "Level of logger [${1#-} is set to [info]" ;;
-            +*) var="XRC_LOG_LEVEL_${1#+}"
-                eval "$var=0"
-                O=$i FLAG_NAME=$var ___x_cmd_logger info "Level of logger [${1#+}] is set to [debug]" ;;
+            -*)
+                logger="${1#-}"
+                ___x_cmd_log_set_level "$logger" info 1
+                ;;
+            +*)
+                logger="${1#+}"
+                ___x_cmd_log_set_level "$logger" debug 0
+                ;;
             *)
                 level="${1#*/}"
-                var="${1%/*}"
+                logger="${1%/*}"
                 case "$level" in
                     debug|dbg|verbose|v)        level=debug;    level_code=0 ;;
                     info|INFO|i)                level=info;     level_code=1 ;;
@@ -45,34 +48,45 @@ ___x_cmd_log() {
                     none|n|no)                  level=none;     level_code=4 ;;
                     *)                          level=debug;    level_code=0 ;;
                 esac
-                O=$i FLAG_NAME=$var ___x_cmd_logger info "Level of logger [$var] is set to [$level]"
-                var="XRC_LOG_LEVEL_${var}"
-                eval "$var=$level_code" ;;
+                ___x_cmd_log_set_level "$logger" "$level" "$level_code"
         esac
         shift
     done
 }
 # EndSection
 
+# Section: init set_level help
+
 ___x_cmd_log_init(){
     local logger_name="${1}";   shift
 
     local var="XRC_LOG_LEVEL_${logger_name}"
-    eval "${logger_name}_log(){     O=$logger_name FLAG_NAME=$var    ___x_cmd_logger \"\$@\";   }"
-    local level_alias
-    for level_alias in "$@"; do
-        local on=
-        local level_name="$level_alias"
-        case "$level_alias" in
-            debug|verbose)  on=     ;;
-            *)              on=1    ;;
-        esac
-        if [ -n "$on" ]; then
-            alias "${logger_name}:${level_alias}"="${logger_name}_log ${level_alias}"
-        else
+    eval "${logger_name}_log(){     O=$logger_name ___x_cmd_logger \"\$@\";   }"
+    ___x_cmd_log_set_level "$logger_name" "info" 1
+}
+
+___x_cmd_log_set_level(){
+    local logger_name="${1:?Provide loggername}"
+    local level="${2:?Provide level}"
+    local level_code="${2:?Provide level code}"
+
+    local var="XRC_LOG_LEVEL_${logger_name}"
+    eval "$var=$level_code"
+
+    local level_name
+    local on=
+    for level_name in debug info warn error; do
+        if [ "$level_name" = "$level" ]; then
+            on=1
+        fi
+        if [ -z "$on" ]; then
             alias "${logger_name}:${level_alias}"=" : # "
+        else
+            alias "${logger_name}:${level_alias}"="${logger_name}_log ${level_alias}"
         fi
     done
+
+    O="$logger_name" ___x_cmd_logger info "Level of logger [$logger_name] is set to [$level]"
 }
 
 ___x_cmd_log_help(){
@@ -99,6 +113,8 @@ A
 
 }
 
+# EndSection
+
 # Section: logger
 # TODO: To move xrc_log
 XRC_LOG_COLOR=1
@@ -109,7 +125,6 @@ ___x_cmd_logger(){
     local logger="${O:-DEFAULT}"
     local IFS=
     local level="${1:?Please provide logger level}"
-    local FLAG_NAME=${FLAG_NAME:?WRONG}
 
     local color="\e[32;2m"
     local level_code=0
@@ -121,7 +136,9 @@ ___x_cmd_logger(){
         *)                      level="DBG"     ;;
     esac
 
-    eval "[ $level_code -lt \"\${$FLAG_NAME:-1}\" ]" && return 0
+    local var="XRC_LOG_LEVEL_${logger}"
+
+    eval "[ $level_code -lt \"\$${var}\" ]" && return 0
 
     local timestamp=
     [ -n "$XRC_LOG_TIMESTAMP" ] && timestamp=" [$(date "${XRC_LOG_TIMESTAMP}")]"

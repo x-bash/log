@@ -136,7 +136,7 @@ ___x_cmd_logger(){
 
     local var="XRC_LOG_LEVEL_${logger}"
 
-    eval "[ $level_code -lt \"\${${var}:-1}\" ]" && return 0
+    eval "[ $level_code -lt \"\${${var}:-1}\" ]" && echo $level_code && return 0
 
     local timestamp=
     [ -n "$XRC_LOG_TIMESTAMP" ] && timestamp=" [$(date "${XRC_LOG_TIMESTAMP}")]"

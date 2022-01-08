@@ -8,27 +8,25 @@ ___x_cmd_log() {
         return
     fi
 
-
     case "$1" in
-        help|-H|-h|--help)      ___x_cmd_log_help; return 1 ;;
-        init)           shift; ___x_cmd_log_init "$@"; return ;;
+        help|-H|-h|--help)
+            ___x_cmd_log_help
+            return 1 ;;
+        init)
+            [ $# -gt 0 ] && shift
+            ___x_cmd_log_init "$@"
+            return ;;
         timestamp)
-            case "$2" in
-                on)     XRC_LOG_TIMESTAMP="+%H:%M:%S";      return 0   ;;
-                off)    XRC_LOG_TIMESTAMP= ;                return 0   ;;
-                *)      printf "Try customized timestamp format wit date command:\n"
-                        if date "$2"; then
-                            XRC_LOG_TIMESTAMP="$2"
-                            return 0
-                        fi
-                        return 1    ;;
-            esac
+            [ $# -gt 0 ] && shift
+            ___x_cmd_log_timestamp "$@"
+            return ;;
+
     esac
 
     local level
     local level_code
     local var
-    while [ $# -ne 0 ]; do
+    while [ $# -gt 0 ]; do
         case "$1" in
             -*)
                 logger="${1#-}"
@@ -59,11 +57,25 @@ ___x_cmd_log() {
 # Section: init set_level help
 
 ___x_cmd_log_init(){
-    local logger_name="${1}";   shift
+    local logger_name="${1}"
 
     local var="XRC_LOG_LEVEL_${logger_name}"
     eval "${logger_name}_log(){     O=$logger_name ___x_cmd_logger \"\$@\";   }"
     ___x_cmd_log_set_level "$logger_name" info 1
+}
+
+___x_cmd_log_timestamp(){
+    local arg="${1:?Provide timestamp}"
+    case "$arg" in
+        on)     XRC_LOG_TIMESTAMP="+%H:%M:%S";      return 0   ;;
+        off)    XRC_LOG_TIMESTAMP= ;                return 0   ;;
+        *)      printf "Try customized timestamp format wit date command:\n"
+                if date "$arg"; then
+                    XRC_LOG_TIMESTAMP="$arg"
+                    return 0
+                fi
+                return 1    ;;
+    esac
 }
 
 ___x_cmd_log_set_level(){
@@ -77,9 +89,7 @@ ___x_cmd_log_set_level(){
     local level_name
     local on=
     for level_name in debug info warn error; do
-        echo "$level_name" = "$level"
         [ "$level_name" = "$level" ] && on=1
-        echo "$level_name" = "$level $on"
         if [ -z "$on" ]; then
             alias "${logger_name}:${level_name}"=" : # "
         else

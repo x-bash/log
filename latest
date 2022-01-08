@@ -68,7 +68,7 @@ ___x_cmd_log_init(){
 ___x_cmd_log_set_level(){
     local logger_name="${1:?Provide loggername}"
     local level="${2:?Provide level}"
-    local level_code="${2:?Provide level code}"
+    local level_code="${3:?Provide level code}"
 
     local var="XRC_LOG_LEVEL_${logger_name}"
     eval "$var=$level_code"

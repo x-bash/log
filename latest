@@ -62,7 +62,7 @@ ___x_cmd_log_init(){
 
     local var="XRC_LOG_LEVEL_${logger_name}"
     eval "${logger_name}_log(){     O=$logger_name ___x_cmd_logger \"\$@\";   }"
-    ___x_cmd_log_set_level "$logger_name" "info" 1
+    ___x_cmd_log_set_level "$logger_name" info 1
 }
 
 ___x_cmd_log_set_level(){
@@ -76,9 +76,7 @@ ___x_cmd_log_set_level(){
     local level_name
     local on=
     for level_name in debug info warn error; do
-        if [ "$level_name" = "$level" ]; then
-            on=1
-        fi
+        [ "$level_name" = "$level" ] && on=1
         if [ -z "$on" ]; then
             alias "${logger_name}:${level_alias}"=" : # "
         else

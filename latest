@@ -62,28 +62,10 @@ ___x_cmd_log_init(){
     local level_alias
     for level_alias in "$@"; do
         local on=
-        local level_name=
+        local level_name="$level_alias"
         case "$level_alias" in
-            *=on)           level_name="${level_alias%=on}"
-                            on=1
-                            ;;
-            *=off)          level_name="${level_alias%=off}"
-                            on=
-                            ;;
-            +*)             level_name="${level_alias#+}"
-                            on=1
-                            ;;
-            -*)             level_name="${level_alias#-}"
-                            on=
-                            ;;
-            *=*)            printf "%s\n"  "This is very wrong. Example like debug=on or debug=off"
-                            ;;
-            debug|verbose)  level_name="$level_alias"
-                            on=
-                            ;;
-            *)              level_name="$level_alias"
-                            on=1
-                            ;;
+            debug|verbose)  on=     ;;
+            *)              on=1    ;;
         esac
         if [ -n "$on" ]; then
             alias "${logger_name}:${level_alias}"="${logger_name}_log ${level_alias}"

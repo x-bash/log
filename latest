@@ -131,12 +131,13 @@ A
 ___X_CMD_LOG_COLORIZED_ENABLE=1
 ___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT=      # "+%H:%M:%S"      # Enable Timestamp.
 
-
 ___X_CMD_LOG_COLORIZED_DEBUG="${___X_CMD_LOG_COLORIZED_DEBUG:-"\e[32;2m"}"
 ___X_CMD_LOG_COLORIZED_INFO="${___X_CMD_LOG_COLORIZED_INFO:-"\e[36m"}"
 ___X_CMD_LOG_COLORIZED_WARN="${___X_CMD_LOG_COLORIZED_WARN:-"\e[33m"}"
 ___X_CMD_LOG_COLORIZED_ERROR="${___X_CMD_LOG_COLORIZED_WARN:-"\e[31m"}"
 
+___X_CMD_LOG_COLORIZED_TIMESTAMP_BEGIN="${___X_CMD_LOG_COLORIZED_WARN:-"["}"
+___X_CMD_LOG_COLORIZED_TIMESTAMP_END="${___X_CMD_LOG_COLORIZED_WARN:-"]"}"
 
 # TODO: rename to ___x_cmd_log_logger
 ___x_cmd_logger(){
@@ -159,22 +160,26 @@ ___x_cmd_logger(){
     eval "[ $level_code -lt \"\${${var}:-1}\" ]" && return 0
 
     local timestamp=
-    [ -n "$___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT" ] && timestamp=" [$(date "${___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT}")]"
+    [ -n "$___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT" ] && timestamp="$(date "${___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT}")"
 
     if [ -n "$___X_CMD_LOG_COLORIZED_ENABLE" ]; then
 
+        [ -n "$timestamp" ] && {
+            timestamp="${___X_CMD_LOG_COLORIZED_TIMESTAMP_BEGIN}${timestamp}${___X_CMD_LOG_COLORIZED_TIMESTAMP_END}${color}"
+        }
+
         if [ $# -eq 0 ]; then
-            printf "${color}%s[%s]${timestamp}: " "$logger" "$level"
+            printf "${color}%s[%s] ${timestamp}: " "$logger" "$level"
             cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; END{ printf("%s", "\033[0m"); }'
         else
-            printf "${color}%s[%s]${timestamp}: %s\e[0m\n" "$logger" "$level" "$*"
+            printf "${color}%s[%s] ${timestamp}: %s\e[0m\n" "$logger" "$level" "$*"
         fi
     else
         if [ $# -eq 0 ]; then
-            printf "%s[%s]${timestamp}: " "$logger" "$level"
+            printf "%s[%s] ${timestamp}: " "$logger" "$level"
             cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; }'
         else
-            printf "%s[%s]${timestamp}: %s\n" "$logger" "$level" "$*"
+            printf "%s[%s] ${timestamp}: %s\n" "$logger" "$level" "$*"
         fi
     fi >&2
 }

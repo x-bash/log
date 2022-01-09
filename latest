@@ -67,11 +67,11 @@ ___x_cmd_log_init(){
 ___x_cmd_log_timestamp(){
     local arg="${1:?Provide timestamp}"
     case "$arg" in
-        on)     XRC_LOG_TIMESTAMP="+%H:%M:%S";      return 0   ;;
-        off)    XRC_LOG_TIMESTAMP= ;                return 0   ;;
+        on)     ___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT="+%H:%M:%S";      return 0   ;;
+        off)    ___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT= ;                return 0   ;;
         *)      printf "Try customized timestamp format wit date command:\n"
                 if date "$arg"; then
-                    XRC_LOG_TIMESTAMP="$arg"
+                    ___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT="$arg"
                     return 0
                 fi
                 return 1    ;;
@@ -129,7 +129,7 @@ A
 # Section: logger
 # TODO: To move xrc_log
 ___X_CMD_LOG_COLORIZED_ENABLE=1
-XRC_LOG_TIMESTAMP=      # "+%H:%M:%S"      # Enable Timestamp.
+___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT=      # "+%H:%M:%S"      # Enable Timestamp.
 
 # TODO: rename to ___x_cmd_log_logger
 ___x_cmd_logger(){
@@ -152,7 +152,7 @@ ___x_cmd_logger(){
     eval "[ $level_code -lt \"\${${var}:-1}\" ]" && return 0
 
     local timestamp=
-    [ -n "$XRC_LOG_TIMESTAMP" ] && timestamp=" [$(date "${XRC_LOG_TIMESTAMP}")]"
+    [ -n "$___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT" ] && timestamp=" [$(date "${___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT}")]"
 
     if [ -n "$___X_CMD_LOG_COLORIZED_ENABLE" ]; then
 

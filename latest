@@ -142,7 +142,6 @@ ___X_CMD_LOG_COLORIZED_TIMESTAMP_END="${___X_CMD_LOG_COLORIZED_WARN:-"]"}"
 
 ___x_cmd_log_logger_func(){
     local logger="${O:-DEFAULT}"
-    local IFS=
     local level="${1:?Please provide logger level}"
 
     local color="$___X_CMD_LOG_COLORIZED_DEBUG"
@@ -159,9 +158,6 @@ ___x_cmd_log_logger_func(){
 
     eval "[ $level_code -lt \"\${${var}:-1}\" ]" && return 0
 
-    local timestamp=
-
-
     if [ -z "$___X_CMD_LOG_COLORIZED_TF" ]; then
         if [ -t 2 ]; then
             ___X_CMD_LOG_COLORIZED_TF=true
@@ -170,6 +166,8 @@ ___x_cmd_log_logger_func(){
         fi
     fi
 
+    local IFS=
+    local timestamp=
     if [ "$___X_CMD_LOG_COLORIZED_TF" = true ]; then
         if [ -n "$___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT" ]; then
             timestamp="$(date "${___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT}")"

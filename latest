@@ -164,9 +164,9 @@ ___x_cmd_logger(){
 
     if [ -n "$___X_CMD_LOG_COLORIZED_ENABLE" ]; then
 
-        [ -n "$timestamp" ] && {
+        if [ -n "$___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT" ]; then
             timestamp="${___X_CMD_LOG_COLORIZED_TIMESTAMP_BEGIN}${timestamp}${___X_CMD_LOG_COLORIZED_TIMESTAMP_END}${color}"
-        }
+        fi
 
         if [ $# -eq 0 ]; then
             printf "${color}%s[%s] ${timestamp}: " "$logger" "$level"
@@ -176,10 +176,10 @@ ___x_cmd_logger(){
         fi
     else
         if [ $# -eq 0 ]; then
-            printf "%s[%s] ${timestamp}: " "$logger" "$level"
+            printf "%s[%s] [${timestamp}]: " "$logger" "$level"
             cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; }'
         else
-            printf "%s[%s] ${timestamp}: %s\n" "$logger" "$level" "$*"
+            printf "%s[%s] [${timestamp}]: %s\n" "$logger" "$level" "$*"
         fi
     fi >&2
 }

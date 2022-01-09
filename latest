@@ -86,16 +86,16 @@ ___x_cmd_log_set_level(){
     local var="XRC_LOG_LEVEL_${logger_name}"
     eval "$var=$level_code"
 
-    local level_name
-    local on=
-    for level_name in debug info warn error; do
-        [ "$level_name" = "$level" ] && on=1
-        if [ -z "$on" ]; then
-            alias "${logger_name}:${level_name}"=" : # "
-        else
-            alias "${logger_name}:${level_name}"="${logger_name}_log ${level_name}"
-        fi
-    done
+    # local level_name
+    # local on=
+    # for level_name in debug info warn error; do
+    #     [ "$level_name" = "$level" ] && on=1
+    #     if [ -z "$on" ]; then
+    #         alias "${logger_name}:${level_name}"=" : # "
+    #     else
+    #         alias "${logger_name}:${level_name}"="${logger_name}_log ${level_name}"
+    #     fi
+    # done
 
     O="$logger_name" ___x_cmd_logger info "Level of logger [$logger_name] is set to [$level]"
 }

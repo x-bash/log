@@ -59,7 +59,7 @@ ___x_cmd_log() {
 ___x_cmd_log_init(){
     local logger_name="${1}"
 
-    local var="XRC_LOG_LEVEL_${logger_name}"
+    local var="___X_CMD_LOG_LEVEL_OF_LOGGER_${logger_name}"
     eval "${logger_name}_log(){     O=$logger_name ___x_cmd_logger \"\$@\";   }"
     ___x_cmd_log_set_level "$logger_name" info 1
 }
@@ -83,7 +83,7 @@ ___x_cmd_log_set_level(){
     local level="${2:?Provide level}"
     local level_code="${3:?Provide level code}"
 
-    local var="XRC_LOG_LEVEL_${logger_name}"
+    local var="___X_CMD_LOG_LEVEL_OF_LOGGER_${logger_name}"
     eval "$var=$level_code"
 
     # local level_name
@@ -128,7 +128,7 @@ A
 
 # Section: logger
 # TODO: To move xrc_log
-XRC_LOG_COLOR=1
+___X_CMD_LOG_COLORIZED_ENABLE=1
 XRC_LOG_TIMESTAMP=      # "+%H:%M:%S"      # Enable Timestamp.
 
 # TODO: rename to ___x_cmd_log_logger
@@ -147,14 +147,14 @@ ___x_cmd_logger(){
         *)                      level="DBG"     ;;
     esac
 
-    local var="XRC_LOG_LEVEL_${logger}"
+    local var="___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}"
 
     eval "[ $level_code -lt \"\${${var}:-1}\" ]" && return 0
 
     local timestamp=
     [ -n "$XRC_LOG_TIMESTAMP" ] && timestamp=" [$(date "${XRC_LOG_TIMESTAMP}")]"
 
-    if [ -n "$XRC_LOG_COLOR" ]; then
+    if [ -n "$___X_CMD_LOG_COLORIZED_ENABLE" ]; then
 
         if [ $# -eq 0 ]; then
             printf "${color}%s[%s]${timestamp}: " "$logger" "$level"

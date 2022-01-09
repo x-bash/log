@@ -176,10 +176,10 @@ ___x_cmd_logger(){
         fi
     else
         if [ $# -eq 0 ]; then
-            printf "%s[%s] [${timestamp}]: " "$logger" "$level"
+            printf "%s[%s] ${timestamp}: " "$logger" "$level"
             cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; }'
         else
-            printf "%s[%s] [${timestamp}]: %s\n" "$logger" "$level" "$*"
+            printf "%s[%s] ${timestamp}: %s\n" "$logger" "$level" "$*"
         fi
     fi >&2
 }

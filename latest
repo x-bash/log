@@ -131,19 +131,26 @@ A
 ___X_CMD_LOG_COLORIZED_ENABLE=1
 ___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT=      # "+%H:%M:%S"      # Enable Timestamp.
 
+
+___X_CMD_LOG_COLORIZED_DEBUG="${___X_CMD_LOG_COLORIZED_DEBUG:-"\e[32;2m"}"
+___X_CMD_LOG_COLORIZED_INFO="${___X_CMD_LOG_COLORIZED_INFO:-"\e[36m"}"
+___X_CMD_LOG_COLORIZED_WARN="${___X_CMD_LOG_COLORIZED_WARN:-"\e[33m"}"
+___X_CMD_LOG_COLORIZED_ERROR="${___X_CMD_LOG_COLORIZED_WARN:-"\e[31m"}"
+
+
 # TODO: rename to ___x_cmd_log_logger
 ___x_cmd_logger(){
     local logger="${O:-DEFAULT}"
     local IFS=
     local level="${1:?Please provide logger level}"
 
-    local color="\e[32;2m"
+    local color="$___X_CMD_LOG_COLORIZED_DEBUG"
     local level_code=0
     case "$level" in
         debug|DEBUG|verbose)    level="DBG";    shift ;;
-        info|INFO)              level="INF";    level_code=1;   color="\e[36m";     shift ;;
-        warn|WARN)              level="WRN";    level_code=2;   color="\e[33m";     shift ;;
-        error|ERROR)            level="ERR";    level_code=3;   color="\e[31m";     shift ;;
+        info|INFO)              level="INF";    level_code=1;   color="$___X_CMD_LOG_COLORIZED_INFO";       shift ;;
+        warn|WARN)              level="WRN";    level_code=2;   color="$___X_CMD_LOG_COLORIZED_WARN";       shift ;;
+        error|ERROR)            level="ERR";    level_code=3;   color="$___X_CMD_LOG_COLORIZED_ERROR";      shift ;;
         *)                      level="DBG"     ;;
     esac
 

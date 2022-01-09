@@ -139,7 +139,6 @@ ___X_CMD_LOG_COLORIZED_ERROR="${___X_CMD_LOG_COLORIZED_WARN:-"\e[31m"}"
 ___X_CMD_LOG_COLORIZED_TIMESTAMP_BEGIN="${___X_CMD_LOG_COLORIZED_WARN:-"["}"
 ___X_CMD_LOG_COLORIZED_TIMESTAMP_END="${___X_CMD_LOG_COLORIZED_WARN:-"]"}"
 
-# TODO: rename to ___x_cmd_log_logger
 ___x_cmd_log_logger_func(){
     local logger="${O:-DEFAULT}"
     local IFS=

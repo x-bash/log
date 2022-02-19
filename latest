@@ -97,9 +97,12 @@ ___x_cmd_log_set_level(){
     #     fi
     # done
 
-    # log init no print
-    [ -z "$O" ] && \
+    if [ -z "$O" ];then
         O="$logger_name" ___x_cmd_log_logger_func info "Level of logger [$logger_name] is set to [$level]"
+    else
+        # log init no print
+        return 0
+    fi
 }
 
 ___x_cmd_log_help(){

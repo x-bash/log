@@ -3,17 +3,9 @@
 
 # Section: log main
 ___x_cmd_log() {
-
-    # if [ $# -eq 0 ]; then
-    #     ___x_cmd_log_help
-    #     return 1
-    # fi
-
-    # O="$1" ___x_cmd_log_logger_func "$2" "$3" "$4"
-
     local op="$1";
     case "$op" in
-        help|-H|-h|--help)          shift; ___x_cmd_log_help ;;
+        help|-H|-h|--help)          shift; ___x_cmd_log_help; return 1 ;;
         init)                       shift; ___x_cmd_log_init "$@" ;;
         timestamp)                  shift; ___x_cmd_log_timestamp "$@" ;;
         -*|+*|*/*)                  ___x_cmd_log_set_logger_level "$@" ;;

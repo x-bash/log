@@ -4,12 +4,12 @@
 # Section: log main
 ___x_cmd_log() {
     case "$1" in
-        :*)                         ___x_cmd_log_logger_func "$@" ;;
-        help|-H|-h|--help)          shift; ___x_cmd_log_help; return 1 ;;
-        init)                       shift; ___x_cmd_log_init "$@" ;;
-        timestamp)                  shift; ___x_cmd_log_timestamp "$@" ;;
-        -*|+*|*/*)                  ___x_cmd_log_set_logger_level "$@" ;;
-        "")                         ___x_cmd_log_help; return 1 ;;
+        :*)                                 ___x_cmd_log_logger_func "$@" ;;
+        "")                                 ___x_cmd_log_help; return 1 ;;
+        help|-H|-h|--help)          shift;  ___x_cmd_log_help; return 1 ;;
+        init)                       shift;  ___x_cmd_log_init "$@" ;;
+        timestamp)                  shift;  ___x_cmd_log_timestamp "$@" ;;
+        -*|+*|*/*)                          ___x_cmd_log_set_logger_level "$@" ;;
     esac
 }
 # EndSection

@@ -142,10 +142,11 @@ ___X_CMD_LOG_COLORIZED_TIMESTAMP_END="${___X_CMD_LOG_COLORIZED_WARN:-"]"}"
 
 ___x_cmd_log_logger_func(){
     case "${1:?Provide level}" in
-        debug)      eval "[ 0 -ge \"\${___X_CMD_LOG__${O}:-1}\" ]" && level="DBG" type_color="$___X_CMD_LOG_COLORIZED_DEBUG"  ___x_cmd_log_logger_func_print "$@" ;;
-        info)       eval "[ 1 -ge \"\${___X_CMD_LOG__${O}:-1}\" ]" && level="INF" type_color="$___X_CMD_LOG_COLORIZED_INFO"   ___x_cmd_log_logger_func_print "$@" ;;
-        warn)       eval "[ 2 -ge \"\${___X_CMD_LOG__${O}:-1}\" ]" && level="WRN" type_color="$___X_CMD_LOG_COLORIZED_WARN"   ___x_cmd_log_logger_func_print "$@" ;;
-        error)      eval "[ 3 -ge \"\${___X_CMD_LOG__${O}:-1}\" ]" && level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@" ;;
+        debug)      eval "[ 0 -ge \"\${___X_CMD_LOG__${O}:-1}\" ]" && { shift;  level="DBG" type_color="$___X_CMD_LOG_COLORIZED_DEBUG"  ___x_cmd_log_logger_func_print "$@"; } ;;
+        info)       eval "[ 1 -ge \"\${___X_CMD_LOG__${O}:-1}\" ]" && { shift;  level="INF" type_color="$___X_CMD_LOG_COLORIZED_INFO"   ___x_cmd_log_logger_func_print "$@"; } ;;
+        warn)       eval "[ 2 -ge \"\${___X_CMD_LOG__${O}:-1}\" ]" && { shift;  level="WRN" type_color="$___X_CMD_LOG_COLORIZED_WARN"   ___x_cmd_log_logger_func_print "$@"; } ;;
+        error)      eval "[ 3 -ge \"\${___X_CMD_LOG__${O}:-1}\" ]" && { shift;  level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@"; } ;;
+        *)          eval "[ 0 -ge \"\${___X_CMD_LOG__${O}:-1}\" ]" && {         level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@"; } ;;
     esac
 }
 

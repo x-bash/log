@@ -7,6 +7,7 @@ ___x_cmd_log() {
         "")                                     ___x_cmd_log_help; return 1 ;;
         help|-H|-h|--help)          shift;      ___x_cmd_log_help; return 1 ;;
         init)                       shift;      ___x_cmd_log_init "$@" ;;
+        init0)                      shift;      ___x_cmd_log_init0 "$@" ;;
         timestamp)                  shift;      ___x_cmd_log_timestamp "$@" ;;
         -*|+*|*/*)                              ___x_cmd_log_set_logger_level "$@" ;;
     esac
@@ -46,9 +47,9 @@ ___x_cmd_log_set_logger_level(){
 
 # EndSection
 
-# Section: init new
+# Section: init init0
 ___x_cmd_log_init(){
-    local logger_name="${1:?Provide logger name}";
+    local logger_name="${1:?Provide logger name}"
 
     if [ "$#" -eq 1 ]; then
         eval "${logger_name}_log(){     ___x_cmd_log_pr $logger_name \"\$@\";   }"
@@ -58,16 +59,16 @@ ___x_cmd_log_init(){
     shift
 
     local level=""
-    local level_code=-1
+    local level_code=6
 
     local arg
     for arg in "$@"; do
         case "$arg" in
             debug|info|warn|error)          ;;
-            +debug)                     [ $level_code -lt 1 ] && { level=debug; level_code=1; } ;;
-            +info)                      [ $level_code -lt 2 ] && { level=info;  level_code=2; } ;;
-            +warn)                      [ $level_code -lt 3 ] && { level=warn;  level_code=3; } ;;
-            +error)                     [ $level_code -lt 4 ] && { level=error; level_code=4; } ;;
+            +debug)                     [ $level_code -gt 1 ] && { level=debug; level_code=1; } ;;
+            +info)                      [ $level_code -gt 2 ] && { level=info;  level_code=2; } ;;
+            +warn)                      [ $level_code -gt 3 ] && { level=warn;  level_code=3; } ;;
+            +error)                     [ $level_code -gt 4 ] && { level=error; level_code=4; } ;;
             *)                          continue ;;
         esac
         eval "alias ${logger_name}:$arg='test 0 -lt \"\${___X_CMD_LOG__${logger_name}:-1}\" || O=${logger_name} ___x_cmd_log_pr_${arg}'"
@@ -80,6 +81,23 @@ ___x_cmd_log_init(){
     fi
 }
 
+___x_cmd_log_init0(){
+    local var="___X_CMD_LOG__${1:?Provide logger name}"
+
+    if eval test "\${$var:-1}" -gt 0; then
+        eval "$var=-1"
+    fi
+
+    local on=
+    for level_name in debug info warn error; do
+        [ "$level_name" = "$level" ] && on=1
+        if [ -z "$on" ]; then
+            alias "${logger_name}:${level_name}"=" : # "
+        else
+            alias "${logger_name}:${level_name}"="${logger_name}_log ${level_name}"
+        fi
+    done
+}
 
 # EndSection
 
@@ -97,23 +115,28 @@ ___x_cmd_log_timestamp(){
 
 ___x_cmd_log_set_level(){
     local logger_name="${1:?Provide loggername}"
-    local level="${2:?Provide level}"
 
-    local level_code="${3:?Provide level code}"
+    local level="${2:?Provide level}"
+    local level_code="${3}"
+
+    if [ -z "$level_code" ]; then
+        case "$level" in
+            debug)      level_code=1 ;;
+            info)       level_code=2 ;;
+            warn)       level_code=3 ;;
+            error)      level_code=4 ;;
+        esac
+    fi
 
     local var="___X_CMD_LOG__${logger_name}"
-    eval "$var=$level_code"
 
-    # local level_name
-    # local on=
-    # for level_name in debug info warn error; do
-    #     [ "$level_name" = "$level" ] && on=1
-    #     if [ -z "$on" ]; then
-    #         alias "${logger_name}:${level_name}"=" : # "
-    #     else
-    #         alias "${logger_name}:${level_name}"="${logger_name}_log ${level_name}"
-    #     fi
-    # done
+    if eval test "\$$var" -gt 0; then
+        eval "$var=$level_code"
+    else
+        eval "$var=-$level_code"
+        ___x_cmd_log_pr "${O:-$logger_name}" warn "Reload the logger by reload the module"
+        xrc reload "$logger_name"
+    fi
 
     # log init no print
     ___x_cmd_log_pr "${O:-$logger_name}" debug "Level of logger [$logger_name] is set to [$level]"

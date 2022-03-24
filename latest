@@ -21,39 +21,6 @@ ___x_cmd_log() {
     esac
 }
 
-# Section: set logger_level
-___x_cmd_log_set_logger_level(){
-    local level
-    local level_code
-    local var
-    while [ $# -gt 0 ]; do
-        case "$1" in
-            -*)
-                logger="${1#-}"
-                ___x_cmd_log_set_level "$logger" info 1
-                ;;
-            +*)
-                logger="${1#+}"
-                ___x_cmd_log_set_level "$logger" debug 0
-                ;;
-            */*)
-                level="${1#*/}"
-                logger="${1%/*}"
-                case "$level" in
-                    debug|dbg|verbose|v)        level=debug;    level_code=0 ;;
-                    info|INFO|i)                level=info;     level_code=1 ;;
-                    warn|WARN|w)                level=warn;     level_code=2 ;;
-                    error|ERROR|e)              level=error;    level_code=3 ;;
-                    none|n|no)                  level=none;     level_code=4 ;;
-                    *)                          level=debug;    level_code=0 ;;
-                esac
-                ___x_cmd_log_set_level "$logger" "$level" "$level_code"
-        esac
-        shift
-    done
-}
-
-# EndSection
 
 # Section: init init0
 ___x_cmd_log_init(){

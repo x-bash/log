@@ -138,23 +138,16 @@ ___X_CMD_LOG_COLORIZED_TIMESTAMP_END="${___X_CMD_LOG_COLORIZED_WARN:-"]"}"
 
 ___x_cmd_log_logger_func(){
     local logger="${O:-DEFAULT}"
-    local level="${1:?Please provide logger level}"
 
-    local type_color="$___X_CMD_LOG_COLORIZED_DEBUG"
-    local level_code=0
-    case "$level" in
-        debug|DEBUG|verbose)    level="DBG";    shift ;;
-        info|INFO)              level="INF";    level_code=1;   type_color="$___X_CMD_LOG_COLORIZED_INFO";       shift ;;
-        warn|WARN)              level="WRN";    level_code=2;   type_color="$___X_CMD_LOG_COLORIZED_WARN";       shift ;;
-        error|ERROR)            level="ERR";    level_code=3;   type_color="$___X_CMD_LOG_COLORIZED_ERROR";      shift ;;
-        *)                      level="DBG"     ;;
+    case "${1:?Please provide logger level}" in
+        debug|DEBUG|verbose)    eval "[ 0 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="DBG" type_color="$___X_CMD_LOG_COLORIZED_DEBUG"  ___x_cmd_log_logger_func_print "$@" ;;
+        info|INFO)              eval "[ 0 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="INF" type_color="$___X_CMD_LOG_COLORIZED_INFO"   ___x_cmd_log_logger_func_print "$@" ;;
+        warn|WARN)              eval "[ 0 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="WRN" type_color="$___X_CMD_LOG_COLORIZED_WARN"   ___x_cmd_log_logger_func_print "$@" ;;
+        error|ERROR)            eval "[ 0 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@" ;;
     esac
+}
 
-    local msg_color="${___X_CMD_LOG_COLORIZED_MSG:-"$type_color"}"
-    local var="___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}"
-
-    eval "[ $level_code -lt \"\${${var}:-1}\" ]" && return 0
-
+___x_cmd_log_logger_func_print(){
     if [ -z "$___X_CMD_LOG_COLORIZED_TF" ]; then
         if [ -t 2 ]; then
             ___X_CMD_LOG_COLORIZED_TF=1
@@ -162,7 +155,8 @@ ___x_cmd_log_logger_func(){
     fi
 
     local IFS=" "
-    local timestamp=
+    local timestamp
+
     if [ -n "$___X_CMD_LOG_COLORIZED_TF" ]; then
         if [ -n "$___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT" ]; then
             timestamp="$(date "${___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT}")"
@@ -170,7 +164,7 @@ ___x_cmd_log_logger_func(){
         fi
 
         if [ $# -gt 0 ]; then
-            printf "${timestamp}\033[1m${type_color}[%s] <%s>: \033[0m${msg_color}%s\033[0m\n" "$level" "$logger" "$*"
+            printf "${timestamp}\033[1m${type_color}[%s] <%s>: \033[0m${___X_CMD_LOG_COLORIZED_MSG:-"$type_color"}%s\033[0m\n" "$level" "$logger" "$*"
         else
             printf "${timestamp}\033[1m${type_color}[%s] <%s>:" "$level" "$logger"
             cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; END{ printf("%s", "\033[0m"); }'
@@ -185,6 +179,7 @@ ___x_cmd_log_logger_func(){
         fi
     fi >&2
 }
+
 # EndSection
 
 # Section: completer, Maybe we can use advise.json to replace it for advise module can support the following function.

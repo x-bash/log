@@ -4,12 +4,12 @@
 # Section: log main
 ___x_cmd_log() {
     case "$1" in
+        :*)                          ___x_cmd_log_logger_func "$@" ;;
         help|-H|-h|--help)          shift; ___x_cmd_log_help; return 1 ;;
         init)                       shift; ___x_cmd_log_init "$@" ;;
         timestamp)                  shift; ___x_cmd_log_timestamp "$@" ;;
         -*|+*|*/*)                  ___x_cmd_log_set_logger_level "$@" ;;
         "")                         ___x_cmd_log_help; return 1 ;;
-        *)                          ___x_cmd_log_logger_func "$@" ;;
     esac
 }
 # EndSection
@@ -133,11 +133,11 @@ ___X_CMD_LOG_COLORIZED_TIMESTAMP_END="${___X_CMD_LOG_COLORIZED_WARN:-"]"}"
 
 ___x_cmd_log_logger_func(){
     case "${2:?Provide level}" in
-        debug)      eval "test 0 -lt \"\${___X_CMD_LOG__${1}:-1}\"" || { local O="$1"; shift 2; level="DBG" type_color="$___X_CMD_LOG_COLORIZED_DEBUG"  ___x_cmd_log_logger_func_print "$@"; } ;;
-        info)       eval "test 1 -lt \"\${___X_CMD_LOG__${1}:-1}\"" || { local O="$1"; shift 2; level="INF" type_color="$___X_CMD_LOG_COLORIZED_INFO"   ___x_cmd_log_logger_func_print "$@"; } ;;
-        warn)       eval "test 2 -lt \"\${___X_CMD_LOG__${1}:-1}\"" || { local O="$1"; shift 2; level="WRN" type_color="$___X_CMD_LOG_COLORIZED_WARN"   ___x_cmd_log_logger_func_print "$@"; } ;;
-        error)      eval "test 3 -lt \"\${___X_CMD_LOG__${1}:-1}\"" || { local O="$1"; shift 2; level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@"; } ;;
-        *)          eval "test 0 -lt \"\${___X_CMD_LOG__${1}:-1}\"" || { local O="$1"; shift 1; level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@"; } ;;
+        debug)      eval "test 0 -lt \"\${___X_CMD_LOG__${1#:}:-1}\"" || { local O="${1#:}"; shift 2; level="DBG" type_color="$___X_CMD_LOG_COLORIZED_DEBUG"  ___x_cmd_log_logger_func_print "$@"; } ;;
+        info)       eval "test 1 -lt \"\${___X_CMD_LOG__${1#:}:-1}\"" || { local O="${1#:}"; shift 2; level="INF" type_color="$___X_CMD_LOG_COLORIZED_INFO"   ___x_cmd_log_logger_func_print "$@"; } ;;
+        warn)       eval "test 2 -lt \"\${___X_CMD_LOG__${1#:}:-1}\"" || { local O="${1#:}"; shift 2; level="WRN" type_color="$___X_CMD_LOG_COLORIZED_WARN"   ___x_cmd_log_logger_func_print "$@"; } ;;
+        error)      eval "test 3 -lt \"\${___X_CMD_LOG__${1#:}:-1}\"" || { local O="${1#:}"; shift 2; level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@"; } ;;
+        *)          eval "test 0 -lt \"\${___X_CMD_LOG__${1#:}:-1}\"" || { local O="${1#:}"; shift 1; level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@"; } ;;
     esac
 }
 

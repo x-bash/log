@@ -1,6 +1,6 @@
 f(){
     for i in `seq 1000`; do
-        ___x_cmd_log http debug hello
+        ___x_cmd_log :http debug hello
         # ___x_cmd_log_logger_func http debug hello
         # echo hi >/dev/null
         # eval [ $i -gt 1000 ]

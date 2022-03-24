@@ -51,7 +51,14 @@ ___x_cmd_log_init(){
     local logger_name="${1}"
 
     local var="___X_CMD_LOG__${logger_name}"
+    # TODO: will be deprecated
     eval "${logger_name}_log(){     ___x_cmd_log_pr $logger_name \"\$@\";   }"
+
+    eval "alias ${logger_name}:debug='test 0 -lt \"\${___X_CMD_LOG__${logger_name}:-1}\" || O=${logger_name} ___x_cmd_log_pr_debug'"
+    eval "alias ${logger_name}:info='test 1 -lt \"\${___X_CMD_LOG__${logger_name}:-1}\"  || O=${logger_name} ___x_cmd_log_pr_info'"
+    eval "alias ${logger_name}:warn='test 2 -lt \"\${___X_CMD_LOG__${logger_name}:-1}\"  || O=${logger_name} ___x_cmd_log_pr_warn'"
+    eval "alias ${logger_name}:error='test 3 -lt \"\${___X_CMD_LOG__${logger_name}:-1}\" || O=${logger_name} ___x_cmd_log_pr_error'"
+
     O=log ___x_cmd_log_set_level "$logger_name" info 1
 }
 

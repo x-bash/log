@@ -134,8 +134,10 @@ ___x_cmd_log_set_level(){
         eval "$var=$level_code"
     else
         eval "$var=-$level_code"
-        ___x_cmd_log_pr "${O:-$logger_name}" warn "Reload the logger by reload the module"
-        [ -d "$___X_CMD_ROOT/$logger_name" ] && xrc:inner "$logger_name/latest"
+        if [ -d "$___X_CMD_ROOT/$logger_name" ]; then
+            ___x_cmd_log_pr "${O:-$logger_name}" warn "Reload the logger by reload the module"
+            xrc:inner "$logger_name/latest"
+        fi
     fi
 
     ___x_cmd_log_pr "${O:-$logger_name}" debug "Level of logger [$logger_name] is set to [$level]"

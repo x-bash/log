@@ -20,7 +20,7 @@ ___x_cmd_log() {
     esac
 }
 
-# http:debug
+# http:dbg
 # http:log hello world
 # http:log [warn] hello world
 # http:log [error] hi

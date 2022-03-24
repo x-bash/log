@@ -65,14 +65,11 @@ ___x_cmd_log_init(){
 ___x_cmd_log_timestamp(){
     local arg="${1:?Provide timestamp}"
     case "$arg" in
-        on)     ___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT="+%H:%M:%S";      return 0   ;;
-        off)    ___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT= ;                return 0   ;;
+        on)     ___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT="+%H:%M:%S" ;;
+        off)    ___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT= ;;
         *)      printf "Try customized timestamp format wit date command:\n"
-                if date "$arg"; then
-                    ___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT="$arg"
-                    return 0
-                fi
-                return 1    ;;
+                date "$arg" || return 1
+                ___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT="$arg"
     esac
 }
 

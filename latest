@@ -135,8 +135,24 @@ ___x_cmd_log_logger_func(){
         info)       eval "test 1 -lt \"\${___X_CMD_LOG__${1#:}:-1}\"" || { local O="${1#:}"; shift 2; level="INF" type_color="$___X_CMD_LOG_COLORIZED_INFO"   ___x_cmd_log_logger_func_print "$@"; } ;;
         warn)       eval "test 2 -lt \"\${___X_CMD_LOG__${1#:}:-1}\"" || { local O="${1#:}"; shift 2; level="WRN" type_color="$___X_CMD_LOG_COLORIZED_WARN"   ___x_cmd_log_logger_func_print "$@"; } ;;
         error)      eval "test 3 -lt \"\${___X_CMD_LOG__${1#:}:-1}\"" || { local O="${1#:}"; shift 2; level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@"; } ;;
-        *)          eval "test 0 -lt \"\${___X_CMD_LOG__${1#:}:-1}\"" || { local O="${1#:}"; shift 1; level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@"; } ;;
+        *)          eval "test 0 -lt \"\${___X_CMD_LOG__${1#:}:-1}\"" || { local O="${1#:}"; shift 1; level="DBG" type_color="$___X_CMD_LOG_COLORIZED_DEBUG"  ___x_cmd_log_logger_func_print "$@"; } ;;
     esac
+}
+
+___x_cmd_log_logger_func_debug(){
+    level="DBG" type_color="$___X_CMD_LOG_COLORIZED_DEBUG"  ___x_cmd_log_logger_func_print "$@"
+}
+
+___x_cmd_log_logger_func_info(){
+    level="INF" type_color="$___X_CMD_LOG_COLORIZED_INFO"  ___x_cmd_log_logger_func_print "$@"
+}
+
+___x_cmd_log_logger_func_warn(){
+    level="WRN" type_color="$___X_CMD_LOG_COLORIZED_WARN"  ___x_cmd_log_logger_func_print "$@"
+}
+
+___x_cmd_log_logger_func_error(){
+    level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@"
 }
 
 ___x_cmd_log_logger_func_print(){

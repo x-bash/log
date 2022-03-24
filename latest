@@ -14,7 +14,7 @@ ___x_cmd_log() {
         init)                   ___x_cmd_log_init "$@" ;;
         timestamp)              ___x_cmd_log_timestamp "$@" ;;
         -*|+*|*/*)              ___x_cmd_log_set_logger_level "$op" "$@" ;;
-        *)
+        *)                      O="$op" ___x_cmd_log_logger_func "$@" ;;
     esac
 }
 # EndSection

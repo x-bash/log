@@ -46,7 +46,7 @@ ___x_cmd_log_set_logger_level(){
 
 # EndSection
 
-# Section: init timestamp set_level help
+# Section: init new
 ___x_cmd_log_init(){
     local logger_name="${1}"
 
@@ -62,6 +62,36 @@ ___x_cmd_log_init(){
     O=log ___x_cmd_log_set_level "$logger_name" info 1
 }
 
+___x_cmd_log_new(){
+    local logger_name="${1:?Provide logger name}"; shift
+
+    local var="___X_CMD_LOG__${logger_name}"
+
+    local arg
+    local level=""
+    local level_code=-1
+    for arg in "$@"; do
+        case "$arg" in
+            debug|info|warn|error)          ;;
+            +debug)                     [ $level_code -lt 1 ] && { level=debug; level_code=1; } ;;
+            +info)                      [ $level_code -lt 2 ] && { level=info;  level_code=2; } ;;
+            +warn)                      [ $level_code -lt 3 ] && { level=warn;  level_code=3; } ;;
+            +error)                     [ $level_code -lt 4 ] && { level=error; level_code=4; } ;;
+            *)                          continue ;;
+        esac
+        eval "alias ${logger_name}:$arg='test 0 -lt \"\${___X_CMD_LOG__${logger_name}:-1}\" || O=${logger_name} ___x_cmd_log_pr_${arg}'"
+    done
+
+    if [ -z "$level" ]; then
+        O=log ___x_cmd_log_set_level "$logger_name" info 1
+    else
+        O=log ___x_cmd_log_set_level "$logger_name" "$level" "$level_code"
+    fi
+}
+
+# EndSection
+
+# Section: timestamp set_level help
 ___x_cmd_log_timestamp(){
     local arg="${1:?Provide timestamp}"
     case "$arg" in
@@ -76,6 +106,7 @@ ___x_cmd_log_timestamp(){
 ___x_cmd_log_set_level(){
     local logger_name="${1:?Provide loggername}"
     local level="${2:?Provide level}"
+
     local level_code="${3:?Provide level code}"
 
     local var="___X_CMD_LOG__${logger_name}"

@@ -22,8 +22,16 @@ ___x_cmd_log() {
 
 # http:dbg
 # http:log hello world
+# http:log warn hello world
+# http:log error hi
+
+# http:log hello world
 # http:log [warn] hello world
 # http:log [error] hi
+
+# http:info hello world
+# http:warn hello world
+# http:error hi
 
 # Section: init init0
 ___x_cmd_log_init(){

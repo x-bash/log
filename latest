@@ -13,11 +13,11 @@ ___x_cmd_log() {
 
     local op="$1";
     case "$op" in
-        # help|-H|-h|--help)          ___x_cmd_log_help ;;
-        # init)                       ___x_cmd_log_init "$@" ;;
-        # timestamp)                  ___x_cmd_log_timestamp "$@" ;;
-        # -*|+*|*/*)                  ___x_cmd_log_set_logger_level "$op" "$@" ;;
-        # "")                         ___x_cmd_log_help; return 1 ;;
+        help|-H|-h|--help)          shift; ___x_cmd_log_help ;;
+        init)                       shift; ___x_cmd_log_init "$@" ;;
+        timestamp)                  shift; ___x_cmd_log_timestamp "$@" ;;
+        -*|+*|*/*)                  ___x_cmd_log_set_logger_level "$@" ;;
+        "")                         ___x_cmd_log_help; return 1 ;;
         *)                          shift; O="${op}" ___x_cmd_log_logger_func "$@" ;;
     esac
 }

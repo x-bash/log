@@ -4,25 +4,23 @@
 # Section: log main
 ___x_cmd_log() {
     if [ $# -eq 0 ]; then
-        ___x_cmd_log -h
-        return
+        ___x_cmd_log_help
+        return 1
     fi
 
-    case "$1" in
-        help|-H|-h|--help)
-            ___x_cmd_log_help
-            return 1 ;;
-        init)
-            [ $# -gt 0 ] && shift
-            ___x_cmd_log_init "$@"
-            return ;;
-        timestamp)
-            [ $# -gt 0 ] && shift
-            ___x_cmd_log_timestamp "$@"
-            return ;;
-
+    local op="$1";  shift
+    case "$op" in
+        help|-H|-h|--help)      ___x_cmd_log_help ;;
+        init)                   ___x_cmd_log_init "$@" ;;
+        timestamp)              ___x_cmd_log_timestamp "$@" ;;
+        -*|+*|*/*)              ___x_cmd_log_set_logger_level "$op" "$@" ;;
+        *)
     esac
+}
+# EndSection
 
+# Section: set logger_level
+___x_cmd_log_set_logger_level(){
     local level
     local level_code
     local var
@@ -36,7 +34,7 @@ ___x_cmd_log() {
                 logger="${1#+}"
                 ___x_cmd_log_set_level "$logger" debug 0
                 ;;
-            *)
+            */*)
                 level="${1#*/}"
                 logger="${1%/*}"
                 case "$level" in
@@ -52,10 +50,10 @@ ___x_cmd_log() {
         shift
     done
 }
+
 # EndSection
 
-# Section: init set_level help
-
+# Section: init timestamp set_level help
 ___x_cmd_log_init(){
     local logger_name="${1}"
 
@@ -103,13 +101,13 @@ ___x_cmd_log_set_level(){
 }
 
 ___x_cmd_log_help(){
-    cat >&2 <<A
+    printf '%s' '
 x log     log control facility
     Usage:
         x log init [ module ]
         x log [... +module | -module | module/log-level ]
 Subcommand:
-    init <module>:                  Generate function '<module>_log'
+    init <module>:                  Generate function "<module>_log"
     timestamp < on | off | <format> >:
                                     off, default setting. shutdown the timestamp output in log
                                     on, default format is +%H:%M:%S
@@ -122,10 +120,9 @@ Example:
     Dsiable debug log for module json:
             x log -json
             x log json/info
-A
+'
 
 }
-
 # EndSection
 
 # Section: logger

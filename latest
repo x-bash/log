@@ -141,9 +141,9 @@ ___x_cmd_log_logger_func(){
 
     case "${1:?Please provide logger level}" in
         debug|DEBUG|verbose)    eval "[ 0 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="DBG" type_color="$___X_CMD_LOG_COLORIZED_DEBUG"  ___x_cmd_log_logger_func_print "$@" ;;
-        info|INFO)              eval "[ 0 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="INF" type_color="$___X_CMD_LOG_COLORIZED_INFO"   ___x_cmd_log_logger_func_print "$@" ;;
-        warn|WARN)              eval "[ 0 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="WRN" type_color="$___X_CMD_LOG_COLORIZED_WARN"   ___x_cmd_log_logger_func_print "$@" ;;
-        error|ERROR)            eval "[ 0 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@" ;;
+        info|INFO)              eval "[ 1 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="INF" type_color="$___X_CMD_LOG_COLORIZED_INFO"   ___x_cmd_log_logger_func_print "$@" ;;
+        warn|WARN)              eval "[ 2 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="WRN" type_color="$___X_CMD_LOG_COLORIZED_WARN"   ___x_cmd_log_logger_func_print "$@" ;;
+        error|ERROR)            eval "[ 3 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@" ;;
     esac
 }
 

@@ -14,7 +14,7 @@ ___x_cmd_log() {
         init)                   ___x_cmd_log_init "$@" ;;
         timestamp)              ___x_cmd_log_timestamp "$@" ;;
         -*|+*|*/*)              ___x_cmd_log_set_logger_level "$op" "$@" ;;
-        *)                      O="$op" ___x_cmd_log_logger_func "$@" ;;
+        *)                      O="${op:-default}" ___x_cmd_log_logger_func "$@" ;;
     esac
 }
 # EndSection
@@ -137,13 +137,11 @@ ___X_CMD_LOG_COLORIZED_TIMESTAMP_BEGIN="${___X_CMD_LOG_COLORIZED_WARN:-"["}"
 ___X_CMD_LOG_COLORIZED_TIMESTAMP_END="${___X_CMD_LOG_COLORIZED_WARN:-"]"}"
 
 ___x_cmd_log_logger_func(){
-    local logger="${O:-DEFAULT}"
-
     case "${1:?Please provide logger level}" in
-        debug|DEBUG|verbose)    eval "[ 0 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="DBG" type_color="$___X_CMD_LOG_COLORIZED_DEBUG"  ___x_cmd_log_logger_func_print "$@" ;;
-        info|INFO)              eval "[ 1 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="INF" type_color="$___X_CMD_LOG_COLORIZED_INFO"   ___x_cmd_log_logger_func_print "$@" ;;
-        warn|WARN)              eval "[ 2 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="WRN" type_color="$___X_CMD_LOG_COLORIZED_WARN"   ___x_cmd_log_logger_func_print "$@" ;;
-        error|ERROR)            eval "[ 3 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}:-1}\" ]" && level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@" ;;
+        debug|DEBUG|verbose)    eval "[ 0 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${O}:-1}\" ]" && level="DBG" type_color="$___X_CMD_LOG_COLORIZED_DEBUG"  ___x_cmd_log_logger_func_print "$@" ;;
+        info|INFO)              eval "[ 1 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${O}:-1}\" ]" && level="INF" type_color="$___X_CMD_LOG_COLORIZED_INFO"   ___x_cmd_log_logger_func_print "$@" ;;
+        warn|WARN)              eval "[ 2 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${O}:-1}\" ]" && level="WRN" type_color="$___X_CMD_LOG_COLORIZED_WARN"   ___x_cmd_log_logger_func_print "$@" ;;
+        error|ERROR)            eval "[ 3 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${O}:-1}\" ]" && level="ERR" type_color="$___X_CMD_LOG_COLORIZED_ERROR"  ___x_cmd_log_logger_func_print "$@" ;;
     esac
 }
 
@@ -164,17 +162,17 @@ ___x_cmd_log_logger_func_print(){
         fi
 
         if [ $# -gt 0 ]; then
-            printf "${timestamp}\033[1m${type_color}[%s] <%s>: \033[0m${___X_CMD_LOG_COLORIZED_MSG:-"$type_color"}%s\033[0m\n" "$level" "$logger" "$*"
+            printf "${timestamp}\033[1m${type_color}[%s] <%s>: \033[0m${___X_CMD_LOG_COLORIZED_MSG:-"$type_color"}%s\033[0m\n" "$level" "$O" "$*"
         else
-            printf "${timestamp}\033[1m${type_color}[%s] <%s>:" "$level" "$logger"
+            printf "${timestamp}\033[1m${type_color}[%s] <%s>:" "$level" "$O"
             cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; END{ printf("%s", "\033[0m"); }'
         fi
     else
         [ -n "$___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT" ] && timestamp="$(date "${___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT}") "
         if [ $# -gt 0 ]; then
-            printf "${timestamp}[%s] <%s>: %s\n" "$level" "$logger" "$*"
+            printf "${timestamp}[%s] <%s>: %s\n" "$level" "$O" "$*"
         else
-            printf "${timestamp}[%s] <%s>:" "$level" "$logger"
+            printf "${timestamp}[%s] <%s>:" "$level" "$O"
             cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; }'
         fi
     fi >&2

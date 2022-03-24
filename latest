@@ -122,6 +122,12 @@ ___x_cmd_log_set_level(){
     ___x_cmd_log_pr "${O:-$logger_name}" debug "Level of logger [$logger_name] is set to [$level]"
 }
 
+___x_cmd_log_show_level(){
+    while [ $# -gt 0 ]; do
+        printf "%s = %s\n" "$1" "$(___x_cmd_log_level_code2name "$1")"
+    done
+}
+
 ___x_cmd_log_help(){
     printf '%s' '
 x log     log control facility

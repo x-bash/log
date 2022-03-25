@@ -9,6 +9,7 @@ ___x_cmd_log() {
         init)                       shift;      ___x_cmd_log_init "$@" ;;
         init2)                      shift;      ___x_cmd_log_init2 "$@" ;;
         init0)                      shift;      ___x_cmd_log_init0 "$@" ;;
+        init1)                      shift;      ___x_cmd_log_init1 "$@" ;;
         init02)                     shift;      ___x_cmd_log_init2 "$@" ;;
         timestamp)                  shift;      ___x_cmd_log_timestamp "$@" ;;
         view)                       shift;      ___x_cmd_log_view "$@" ;;
@@ -73,6 +74,10 @@ ___x_cmd_log_init_inner(){
 # Section: zero cost log
 ___x_cmd_log_init0(){
     ___x_cmd_log_init0_inner "$@" 1 2 3 4
+}
+
+___x_cmd_log_init01(){
+    ___x_cmd_log_init0_inner "$@" 1
 }
 
 ___x_cmd_log_init02(){

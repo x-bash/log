@@ -228,16 +228,10 @@ ___x_cmd_log_pr_error(){
 }
 
 ___x_cmd_log_0(){
-    if [ -z "$___X_CMD_LOG_C_TF" ]; then
-        if [ -t 2 ]; then
-            ___X_CMD_LOG_C_TF=1
-        fi
-    fi
-
     local IFS=" "
     local timestamp
 
-    if [ -n "$___X_CMD_LOG_C_TF" ]; then
+    if [ -n "$___X_CMD_LOG_C_TF" ] || [ -t 2 ]; then
         if [ -n "$___X_CMD_LOG__TIMESTAMP_FORMAT" ]; then
             timestamp="$(date "${___X_CMD_LOG__TIMESTAMP_FORMAT}")"
             timestamp="${___X_CMD_LOG_C_TIMESTAMP_BEGIN}${timestamp}${___X_CMD_LOG_C_TIMESTAMP_END} "

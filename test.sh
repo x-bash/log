@@ -10,7 +10,7 @@ f(){
         # ___x_cmd_log_logger_func http debug hello
         # g
         # abc:debug hi 2>/dev/stderr
-        echo hi >/dev/stdout
+        echo hi >&2
         # eval [ $i -gt 1000 ]
         # eval "[ 0 -ge \"\${___X_CMD_LOG_LEVEL_OF_LOGGER_${O}:-1}\" ]"
     done

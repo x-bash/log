@@ -28,7 +28,7 @@ ___x_cmd_log_init(){
 
     local var="___X_CMD_LOG__$logger_name"
 
-    if eval test "\${$var:2}" -lt 0; then
+    if eval test "\${$var:-2}" -lt 0; then
         eval "$var=2"
     fi
 

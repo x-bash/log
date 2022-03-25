@@ -7,10 +7,10 @@ ___x_cmd_log() {
         "")                                     ___x_cmd_log_help; return 1 ;;
         help|-H|-h|--help)          shift;      ___x_cmd_log_help; return 1 ;;
         init)                       shift;      ___x_cmd_log_init "$@" ;;
-        init2)                      shift;      ___x_cmd_log_init2 "$@" ;;
-        init0)                      shift;      ___x_cmd_log_init0 "$@" ;;
         init1)                      shift;      ___x_cmd_log_init1 "$@" ;;
-        init02)                     shift;      ___x_cmd_log_init2 "$@" ;;
+        init0)                      shift;      ___x_cmd_log_init0 "$@" ;;
+        init01)                     shift;      ___x_cmd_log_init01 "$@" ;;
+        init02)                     shift;      ___x_cmd_log_init02 "$@" ;;
         timestamp)                  shift;      ___x_cmd_log_timestamp "$@" ;;
         view)                       shift;      ___x_cmd_log_view "$@" ;;
         on)
@@ -41,15 +41,14 @@ ___x_cmd_log() {
 }
 
 # Section: init regular log
+
+# Application Module
+
+___x_cmd_log_init1(){
+    :
+}
+
 ___x_cmd_log_init(){
-    ___x_cmd_log_init_inner "$@" 1 2 3 4
-}
-
-___x_cmd_log_init2(){
-    ___x_cmd_log_init_inner "$@" 1 2
-}
-
-___x_cmd_log_init_inner(){
     local logger_name="${1:?Provide logger name}"
     shift
 
@@ -57,13 +56,12 @@ ___x_cmd_log_init_inner(){
 
     eval "$var=\${$var:-2}"
     eval "___X_CMD_LOG__0_$logger_name="
-    # eval "___X_CMD_LOG__2_$logger_name=/dev/stderr"
 
     # deprecated
     eval "${logger_name}_log(){     ___x_cmd_log_pr $logger_name \"\$@\";   }"
 
     local level_name
-    for level_code in "$@"; do
+    for level_code in 1 2 3 4; do
         level_name="$(___x_cmd_log_level_code2name "$level_code")"
         eval "alias ${logger_name}[$level_name]='test $level_code -lt \"\${___X_CMD_LOG__${logger_name}:-2}\" || O=${logger_name} ___x_cmd_log_pr_${level_name}'"
     done
@@ -72,15 +70,18 @@ ___x_cmd_log_init_inner(){
 # EndSection
 
 # Section: zero cost log
+
+# DEBUG + INFO + WARN + ERROR: For those module
 ___x_cmd_log_init0(){
     ___x_cmd_log_init0_inner "$@" 1 2 3 4
 }
 
-# High Efficiency Module. Like str, list, dict.
+# High Efficiency Module. Like str, list, dict: DEBUG
 ___x_cmd_log_init01(){
     ___x_cmd_log_init0_inner "$@" 1
 }
 
+# DEBUG + INFO
 ___x_cmd_log_init02(){
     ___x_cmd_log_init0_inner "$@" 1 2
 }

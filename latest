@@ -176,14 +176,6 @@ ___x_cmd_log_set_level(){
         fi
     fi
 
-<<<<<<< HEAD
-    if [ -z "$O" ];then
-        O="$logger_name" ___x_cmd_log_logger_func info "Level of logger [$logger_name] is set to [$level]"
-    else
-        # log init no print
-        return 0
-    fi
-=======
     # eval "$O:debug  \"Level of logger [\$logger_name] is set to [\$level]\""
     ___x_cmd_log_pr log debug "Level of logger [$logger_name] is set to [$level]"
 }
@@ -207,7 +199,6 @@ ___x_cmd_log_timestamp(){
                 date "$arg" || return 1
                 ___X_CMD_LOG__TIMESTAMP_FORMAT="$arg"
     esac
->>>>>>> issue_I4BONS_lowcost_ljh_20220324
 }
 
 ___x_cmd_log_help(){

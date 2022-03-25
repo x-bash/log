@@ -76,6 +76,7 @@ ___x_cmd_log_init0(){
     ___x_cmd_log_init0_inner "$@" 1 2 3 4
 }
 
+# High Efficiency Module. Like str, list, dict.
 ___x_cmd_log_init01(){
     ___x_cmd_log_init0_inner "$@" 1
 }

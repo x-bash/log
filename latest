@@ -45,10 +45,14 @@ ___x_cmd_log() {
 # Application Module
 
 ___x_cmd_log_init1(){
-    :
+    ___x_cmd_log_init_inner "$@" 1
 }
 
 ___x_cmd_log_init(){
+    ___x_cmd_log_init_inner "$@" 1 2 3 4
+}
+
+___x_cmd_log_init_inner(){
     local logger_name="${1:?Provide logger name}"
     shift
 

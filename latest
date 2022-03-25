@@ -73,7 +73,7 @@ ___x_cmd_log_redirect(){
 }
 
 ___x_cmd_log_view(){
-    :
+    awk -f "$___X_CMD_ROOT/log/lib/view.awk"
 }
 
 # EndSection

@@ -215,7 +215,7 @@ Example:
 }
 # EndSection
 
-# Section: logger
+# Section: printer
 # TODO: To move xrc_log
 ___X_CMD_LOG_C_TF=
 

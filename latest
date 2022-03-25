@@ -328,4 +328,3 @@ ___x_cmd_log_completer(){
 }
 # EndSection
 
-xrc setmain ___x_cmd_log

@@ -65,7 +65,6 @@ ___x_cmd_log_init_inner(){
 # EndSection
 
 
-
 # Section: redirect view
 
 ___x_cmd_log_redirect(){
@@ -226,36 +225,6 @@ Example:
 
 # Section: printer
 # TODO: To move xrc_log
-<<<<<<< HEAD
-___X_CMD_LOG_COLORIZED_TF=
-
-___X_CMD_LOG_LOGGER_TIMESTAMP_FORMAT=      # "+%H:%M:%S"      # Enable Timestamp.
-
-___X_CMD_LOG_COLORIZED_MSG="${___X_CMD_LOG_COLORIZED_MSG:-"\\033[1m"}"
-___X_CMD_LOG_COLORIZED_DEBUG="${___X_CMD_LOG_COLORIZED_DEBUG:-"\\033[32m"}"
-___X_CMD_LOG_COLORIZED_INFO="${___X_CMD_LOG_COLORIZED_INFO:-"\\033[36m"}"
-___X_CMD_LOG_COLORIZED_WARN="${___X_CMD_LOG_COLORIZED_WARN:-"\\033[33m"}"
-___X_CMD_LOG_COLORIZED_ERROR="${___X_CMD_LOG_COLORIZED_ERROR:-"\\033[31m"}"
-
-___X_CMD_LOG_COLORIZED_TIMESTAMP_BEGIN="${___X_CMD_LOG_COLORIZED_WARN:-"["}"
-___X_CMD_LOG_COLORIZED_TIMESTAMP_END="${___X_CMD_LOG_COLORIZED_WARN:-"]"}"
-
-___x_cmd_log_logger_func(){
-    local logger="${O:-DEFAULT}"
-    local level="${1:?Please provide logger level}"
-
-    local type_color
-    local level_code=0
-    local msg_color="${___X_CMD_LOG_COLORIZED_MSG}"
-    case "$level" in
-        debug|DEBUG|verbose)    level="DBG";                    type_color="$___X_CMD_LOG_COLORIZED_DEBUG";          shift ;;
-        info|INFO)              level="INF";    level_code=1;   type_color="$___X_CMD_LOG_COLORIZED_INFO";           shift ;;
-        warn|WARN)              level="WRN";    level_code=2;   type_color="$___X_CMD_LOG_COLORIZED_WARN"
-                                                                msg_color="\\033[1m${___X_CMD_LOG_COLORIZED_WARN}";  shift ;;
-        error|ERROR)            level="ERR";    level_code=3;   type_color="$___X_CMD_LOG_COLORIZED_ERROR"
-                                                                msg_color="\\033[1m${___X_CMD_LOG_COLORIZED_ERROR}"; shift ;;
-        *)                      level="DBG"     ;;
-=======
 ___X_CMD_LOG_C_TF=
 
 ___X_CMD_LOG__TIMESTAMP_FORMAT=      # "+%H:%M:%S"      # Enable Timestamp.
@@ -276,17 +245,12 @@ ___x_cmd_log_pr(){
         warn)       eval "test 3 -ge \"\${___X_CMD_LOG__${1#:}:-2}\"" && { local O="${1#:}"; shift 2; L=WRN C="$___X_CMD_LOG_C_WARN"   ___x_cmd_log_0 "$@"; } ;;
         error)      eval "test 4 -ge \"\${___X_CMD_LOG__${1#:}:-2}\"" && { local O="${1#:}"; shift 2; L=ERR C="$___X_CMD_LOG_C_ERROR"  ___x_cmd_log_0 "$@"; } ;;
         *)          eval "test 3 -ge \"\${___X_CMD_LOG__${1#:}:-2}\"" && { local O="${1#:}"; shift 1; L=INF C="$___X_CMD_LOG_C_INFO"   ___x_cmd_log_0 "$@"; } ;;
->>>>>>> issue_I4BONS_lowcost_ljh_20220324
     esac
 }
 
-<<<<<<< HEAD
-    local var="___X_CMD_LOG_LEVEL_OF_LOGGER_${logger}"
-=======
 ___x_cmd_log_pr_debug(){
     L=DBG C="$___X_CMD_LOG_C_DEBUG"  ___x_cmd_log_0 "$@"
 }
->>>>>>> issue_I4BONS_lowcost_ljh_20220324
 
 ___x_cmd_log_pr_info(){
     L=INF C="$___X_CMD_LOG_C_INFO"  ___x_cmd_log_0 "$@"
@@ -310,19 +274,11 @@ ___x_cmd_log_0(){
             timestamp="${___X_CMD_LOG_C_TIMESTAMP_BEGIN}${timestamp}${___X_CMD_LOG_C_TIMESTAMP_END} "
         fi
 
-<<<<<<< HEAD
-        if [ $# -eq 0 ]; then
-            printf "${timestamp}${type_color}[%s] <%s>:" "$level" "$logger"
-            cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; END{ printf("%s", "\033[0m"); }'
-        else
-            printf "${timestamp}${type_color}[%s] <%s>: \033[0m${msg_color}%s\033[0m\n" "$level" "$logger" "$*"
-=======
         if [ $# -gt 0 ]; then
             printf "${timestamp}${C}[%s] <%s>: \033[0m${___X_CMD_LOG_C_MSG:-"$C"}%s\033[0m\n" "$L" "$O" "$*"
         else
             printf "${timestamp}${C}[%s] <%s>:" "$L" "$O"
             cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; END{ printf("%s", "\033[0m"); }'
->>>>>>> issue_I4BONS_lowcost_ljh_20220324
         fi
     else
         [ -n "$___X_CMD_LOG__TIMESTAMP_FORMAT" ] && timestamp="$(date "${___X_CMD_LOG__TIMESTAMP_FORMAT}") "

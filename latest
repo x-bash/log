@@ -44,6 +44,7 @@ ___x_cmd_log_init(){
 
     eval "$var=\${$var:-2}"
     eval "___X_CMD_LOG__0_$logger_name="
+    # eval "___X_CMD_LOG__2_$logger_name=/dev/stderr"
 
     # deprecated
     eval "${logger_name}_log(){     ___x_cmd_log_pr $logger_name \"\$@\";   }"

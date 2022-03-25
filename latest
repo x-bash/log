@@ -60,8 +60,6 @@ ___x_cmd_log_init0(){
 
     local var="___X_CMD_LOG__$logger_name"
 
-    local is0="___X_CMD_LOG__0_$logger_name"
-
     eval "$var=\${$var:-2}"
     eval "___X_CMD_LOG__0_$logger_name=1"
 

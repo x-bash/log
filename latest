@@ -7,7 +7,9 @@ ___x_cmd_log() {
         "")                                     ___x_cmd_log_help; return 1 ;;
         help|-H|-h|--help)          shift;      ___x_cmd_log_help; return 1 ;;
         init)                       shift;      ___x_cmd_log_init "$@" ;;
+        init2)                      shift;      ___x_cmd_log_init2 "$@" ;;
         init0)                      shift;      ___x_cmd_log_init0 "$@" ;;
+        init02)                     shift;      ___x_cmd_log_init2 "$@" ;;
         timestamp)                  shift;      ___x_cmd_log_timestamp "$@" ;;
         view)                       shift;      ___x_cmd_log_view "$@" ;;
         on)
@@ -37,9 +39,18 @@ ___x_cmd_log() {
     esac
 }
 
-# Section: init init0
+# Section: init regular log
 ___x_cmd_log_init(){
+    ___x_cmd_log_init_inner "$@" 1 2 3 4
+}
+
+___x_cmd_log_init2(){
+    ___x_cmd_log_init_inner "$@" 1 2
+}
+
+___x_cmd_log_init_inner(){
     local logger_name="${1:?Provide logger name}"
+    shift
 
     local var="___X_CMD_LOG__$logger_name"
 
@@ -51,13 +62,24 @@ ___x_cmd_log_init(){
     eval "${logger_name}_log(){     ___x_cmd_log_pr $logger_name \"\$@\";   }"
 
     local level_name
-    for level_code in 1 2 3 4; do
+    for level_code in "$@"; do
         level_name="$(___x_cmd_log_level_code2name "$level_code")"
         eval "alias ${logger_name}:$level_name='test $level_code -lt \"\${___X_CMD_LOG__${logger_name}:-2}\" || O=${logger_name} ___x_cmd_log_pr_${level_name}'"
     done
 }
 
+# EndSection
+
+# Section: zero cost log
 ___x_cmd_log_init0(){
+    ___x_cmd_log_init0_inner "$@" 1 2 3 4
+}
+
+___x_cmd_log_init02(){
+    ___x_cmd_log_init0_inner "$@" 1 2
+}
+
+___x_cmd_log_init0_inner(){
     local logger_name="${1:?Provide logger name}"
 
     local var="___X_CMD_LOG__$logger_name"

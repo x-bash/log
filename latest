@@ -64,7 +64,7 @@ ___x_cmd_log_init_inner(){
     local level_name
     for level_code in "$@"; do
         level_name="$(___x_cmd_log_level_code2name "$level_code")"
-        eval "alias ${logger_name}:$level_name='test $level_code -lt \"\${___X_CMD_LOG__${logger_name}:-2}\" || O=${logger_name} ___x_cmd_log_pr_${level_name}'"
+        eval "alias ${logger_name}[$level_name]='test $level_code -lt \"\${___X_CMD_LOG__${logger_name}:-2}\" || O=${logger_name} ___x_cmd_log_pr_${level_name}'"
     done
 }
 
@@ -95,9 +95,9 @@ ___x_cmd_log_init0_inner(){
     for level_code in "$@"; do
         level_name="$(___x_cmd_log_level_code2name "$level_code")"
         if [ "$level_code" -lt "$level_target_code" ]; then
-            alias "${logger_name}:${level_name}"=" : # "
+            alias "${logger_name}[${level_name}]"=" : # "
         else
-            alias "${logger_name}:${level_name}"="O=${logger_name} ___x_cmd_log_pr_${level_name}"
+            alias "${logger_name}[${level_name}]"="O=${logger_name} ___x_cmd_log_pr_${level_name}"
         fi
     done
 
@@ -323,5 +323,3 @@ ___x_cmd_log_completer(){
 # EndSection
 
 xrc setmain ___x_cmd_log
-
-alias xlog=___x_cmd_log

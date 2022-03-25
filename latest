@@ -6,11 +6,14 @@ ___x_cmd_log() {
         :*)                                     ___x_cmd_log_pr "$@" ;;
         "")                                     ___x_cmd_log_help; return 1 ;;
         help|-H|-h|--help)          shift;      ___x_cmd_log_help; return 1 ;;
+
         init)                       shift;      ___x_cmd_log_init "$@" ;;
         init1)                      shift;      ___x_cmd_log_init1 "$@" ;;
+
         init0)                      shift;      ___x_cmd_log_init0 "$@" ;;
         init01)                     shift;      ___x_cmd_log_init01 "$@" ;;
         init02)                     shift;      ___x_cmd_log_init02 "$@" ;;
+
         timestamp)                  shift;      ___x_cmd_log_timestamp "$@" ;;
         view)                       shift;      ___x_cmd_log_view "$@" ;;
         *)

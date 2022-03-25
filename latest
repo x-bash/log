@@ -9,6 +9,7 @@ ___x_cmd_log() {
         init)                       shift;      ___x_cmd_log_init "$@" ;;
         init0)                      shift;      ___x_cmd_log_init0 "$@" ;;
         timestamp)                  shift;      ___x_cmd_log_timestamp "$@" ;;
+        view)                       shift;      ___x_cmd_log_timestamp "$@" ;;
         on)
             shift
             while [ "$#" -gt 0 ]; do

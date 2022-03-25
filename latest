@@ -54,8 +54,10 @@ ___x_cmd_log_init0(){
     local level_target_code
     eval level_target_code="\${$var#-}"
 
+    local level_code
     local level_name
     for level_code in 1 2 3 4; do
+        level_name="$(___x_cmd_log_level_code2name "$level_code")"
         if [ "$level_code" -lt "$level_target_code" ]; then
             alias "${logger_name}:${level_name}"=" : # "
         else

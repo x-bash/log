@@ -9,12 +9,26 @@ ___x_cmd_log() {
         init)                       shift;      ___x_cmd_log_init "$@" ;;
         init0)                      shift;      ___x_cmd_log_init0 "$@" ;;
         timestamp)                  shift;      ___x_cmd_log_timestamp "$@" ;;
+        on)
+            shift
+            while [ "$#" -gt 0 ]; do
+                ___x_cmd_log_set_level "$1" debug
+                shift
+            done
+            ;;
+        off)
+            shift
+            while [ "$#" -gt 0 ]; do
+                ___x_cmd_log_set_level "$1" info
+                shift
+            done
+            ;;
         *)
             while [ "$#" -gt 0 ]; do
                 case "$1" in
                     */*)                        ___x_cmd_log_set_level "${1%/*}" "${1#*/}" ;;
                     +*)                         ___x_cmd_log_set_level "${1#+}" debug ;;
-                    -*)                         ___x_cmd_log_set_level "${1#+}" info ;;
+                    -*)                         ___x_cmd_log_set_level "${1#-}" info ;;
                     *)                          ___x_cmd_log_set_level "$1" info
                 esac
                 shift
@@ -29,6 +43,7 @@ ___x_cmd_log_init(){
     local var="___X_CMD_LOG__$logger_name"
 
     eval "$var=\${$var:-2}"
+    eval "___X_CMD_LOG__0_$logger_name="
 
     # deprecated
     eval "${logger_name}_log(){     ___x_cmd_log_pr $logger_name \"\$@\";   }"
@@ -48,6 +63,7 @@ ___x_cmd_log_init0(){
     local is0="___X_CMD_LOG__0_$logger_name"
 
     eval "$var=\${$var:-2}"
+    eval "___X_CMD_LOG__0_$logger_name=1"
 
     local level_target_code
     eval level_target_code="\${$var}"
@@ -111,10 +127,10 @@ ___x_cmd_log_set_level(){
 
     local var="___X_CMD_LOG__${logger_name}"
 
-    if eval test "\$$var" -gt 0; then
+    if eval test -z "\$___X_CMD_LOG__0_$logger_name"; then
         eval "$var=$level_code"
     else
-        eval "$var=-$level_code"
+        eval "$var=$level_code"
         if [ -d "$___X_CMD_ROOT/$logger_name" ]; then
             ___x_cmd_log_pr "${O:-$logger_name}" warn "Reload the logger by reload the module"
             xrc:inner "$logger_name/latest"
@@ -122,7 +138,7 @@ ___x_cmd_log_set_level(){
     fi
 
     # eval "$O:debug  \"Level of logger [\$logger_name] is set to [\$level]\""
-    log:debug "Level of logger [$logger_name] is set to [$level]"
+    ___x_cmd_log_pr log debug "Level of logger [$logger_name] is set to [$level]"
 }
 
 ___x_cmd_log_show_level(){

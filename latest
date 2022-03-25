@@ -214,13 +214,11 @@ Subcommand:
                                     on, default format is +%H:%M:%S
                                     <format>, customized timestamp format like "+%H:%M:%S", "+%m/%d-%H:%M:%S"
 Example:
-    Enable debug log for module json:
-            x log +json          or   x log json
-            x log json/verbose   or   x log json/v
-            x log json/debug     or   x log json/d
-    Dsiable debug log for module json:
-            x log -json
-            x log json/info
+    Change debug log level for module json:
+            x log json/debug   or   x log +json
+            x log json/info    or   x log -json
+            x log json/warn
+            x log json/error
 '
 
 }

@@ -38,7 +38,7 @@ ___x_cmd_log_init(){
     local level_name
     for level_code in 1 2 3 4; do
         level_name="$(___x_cmd_log_level_code2name "$level_code")"
-        eval "alias ${logger_name}:$level_name='test $level_code -lt \"\${___X_CMD_LOG__${logger_name}:-1}\" || O=${logger_name} ___x_cmd_log_pr_${level_name}'"
+        eval "alias ${logger_name}:$level_name='test $level_code -lt \"\${___X_CMD_LOG__${logger_name}:-2}\" || O=${logger_name} ___x_cmd_log_pr_${level_name}'"
     done
 }
 
@@ -59,7 +59,7 @@ ___x_cmd_log_init0(){
         if [ "$level_code" -lt "$level_target_code" ]; then
             alias "${logger_name}:${level_name}"=" : # "
         else
-            alias "${logger_name}:${level_name}"="${logger_name}_log ${level_name}"
+            alias "${logger_name}:${level_name}"="O=${logger_name} ___x_cmd_log_pr_${level_name}"
         fi
     done
 

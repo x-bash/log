@@ -97,7 +97,7 @@ ___x_cmd_log_init02(){
 
 ___x_cmd_log_init0_inner(){
     local logger_name="${1:?Provide logger name}"
-
+    shift
     local var="___X_CMD_LOG__$logger_name"
 
     eval "$var=\${$var:-2}"

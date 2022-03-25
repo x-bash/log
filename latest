@@ -14,6 +14,8 @@ ___x_cmd_log() {
         init01)                     shift;      ___x_cmd_log_init01 "$@" ;;
         init02)                     shift;      ___x_cmd_log_init02 "$@" ;;
 
+        redirect)                   shift;      ___x_cmd_log_redirect "$@" ;;
+
         timestamp)                  shift;      ___x_cmd_log_timestamp "$@" ;;
         view)                       shift;      ___x_cmd_log_view "$@" ;;
         *)
@@ -62,7 +64,15 @@ ___x_cmd_log_init_inner(){
 
 # EndSection
 
-# Section: view
+
+
+# Section: redirect view
+
+___x_cmd_log_redirect(){
+    mkdir -p $___X_CMD_ROOT/.tmp/log/$$
+    "$@" 2>"$___X_CMD_ROOT/.tmp/log/$$/$(date +%s)"
+}
+
 ___x_cmd_log_view(){
     :
 }

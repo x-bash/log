@@ -107,7 +107,7 @@ ___x_cmd_log_init0_inner(){
         fi
     done
 
-    eval "$var=-$level_code"
+    eval "$var=$level_code"
 }
 
 # EndSection

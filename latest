@@ -62,6 +62,12 @@ ___x_cmd_log_init_inner(){
 
 # EndSection
 
+# Section: view
+___x_cmd_log_view(){
+    :
+}
+# EndSection
+
 # Section: zero cost log
 
 # DEBUG + INFO + WARN + ERROR: For those module

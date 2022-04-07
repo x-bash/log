@@ -49,17 +49,28 @@ ___x_cmd_log_init_inner(){
 
     local var="___X_CMD_LOG__$logger_name"
 
-    eval "$var=\${$var:-2}"
-    eval "___X_CMD_LOG__0_$logger_name="
+    local code="
+$var=\${$var:-2}
+___X_CMD_LOG__0_$logger_name=
 
-    # deprecated
-    eval "${logger_name}_log(){     ___x_cmd_log_pr $logger_name \"\$@\";   }"
+${logger_name}_log(){     ___x_cmd_log_pr $logger_name \"\$@\";   }
+"
+
+    # eval "$var=\${$var:-2}"
+    # eval "___X_CMD_LOG__0_$logger_name="
+
+    # # deprecated
+    # eval "${logger_name}_log(){     ___x_cmd_log_pr $logger_name \"\$@\";   }"
 
     local level_name
     for level_code in 1 2 3 4; do
-        level_name="$(___x_cmd_log_level_code2name "$level_code")"
-        eval "alias ${logger_name}:$level_name='test $level_code -lt \"\${___X_CMD_LOG__${logger_name}:-2}\" || O=${logger_name} ___x_cmd_log_pr_${level_name}'"
+        ___x_cmd_log_level_code_to_level_name "$level_code"
+        code="$code
+alias ${logger_name}:$level_name='test $level_code -lt \"\${___X_CMD_LOG__${logger_name}:-2}\" || O=${logger_name} ___x_cmd_log_pr_${level_name}'
+"
     done
+
+    eval "$code"
 }
 
 # EndSection
@@ -110,7 +121,7 @@ ___x_cmd_log_init0_inner(){
     local level_code
     local level_name
     for level_code in "$@"; do
-        level_name="$(___x_cmd_log_level_code2name "$level_code")"
+        ___x_cmd_log_level_code_to_level_name "$level_code"
         if [ "$level_code" -lt "$level_target_code" ]; then
             alias "${logger_name}:${level_name}"=" : # "
         else
@@ -142,13 +153,13 @@ ___x_cmd_log_level_name2code(){
     esac
 }
 
-___x_cmd_log_level_code2name(){
+___x_cmd_log_level_code_to_level_name(){
     case "${1:?Provide code}" in
-        1)      printf "%s" debug ;;
-        2)      printf "%s" info ;;
-        3)      printf "%s" warn ;;
-        4)      printf "%s" error ;;
-        *)      printf "%s" info ;;
+        1)      level_name=debug ;;
+        2)      level_name=info ;;
+        3)      level_name=warn ;;
+        4)      level_name=error ;;
+        *)      level_name=info ;;
     esac
 }
 
@@ -181,8 +192,10 @@ ___x_cmd_log_set_level(){
 }
 
 ___x_cmd_log_show_level(){
+    local level_name
     while [ $# -gt 0 ]; do
-        printf "%s = %s\n" "$1" "$(eval ___x_cmd_log_level_code2name "\$___X_CMD_LOG__$1")"
+        eval ___x_cmd_log_level_code_to_level_name "\$___X_CMD_LOG__$1"
+        printf "%s = %s\n" "$1" "$level_name"
         shift
     done
 }

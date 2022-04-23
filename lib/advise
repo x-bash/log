@@ -40,6 +40,4 @@ ___x_cmd_log_advise(){
             ;;
     esac
 }
-
-___x_cmd_log_advise
 # EndSection

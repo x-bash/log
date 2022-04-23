@@ -6,7 +6,7 @@
 <module>:warn 'Exit code is $?'  # Alwasy print out 'Exit code is 1'
 ```
 
-这个设计背后是因为效率 ~ 为了引入参数的惰性计算不得不做的妥协
+这个问题背后是因为效率 ~ 为了引入参数的惰性计算不得不做的妥协
 
 ```bash
 x log init worker

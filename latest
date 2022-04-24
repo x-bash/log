@@ -160,10 +160,10 @@ ___x_cmd_log_set_level(){
     local logger_name="${1:?Provide loggername}"
 
     # TODO: how to check the logger_name is valid?
-    if ! eval "___x_cmd_testvalidvarname_${logger_name}___=1 2>/dev/null"; then
+    ___x_cmd_validenvname "${logger_name}" || {
         ___x_cmd_log_pr log info "Logger Name should be match [0-9A-Za-z_]+ "
         return 1
-    fi
+    }
 
     local level_name
     ___x_cmd_log_level_name "${2:?Provide level}"

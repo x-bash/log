@@ -161,7 +161,7 @@ ___x_cmd_log_set_level(){
 
     # TODO: how to check the logger_name is valid?
     if ! ___x_cmd_validenvname "${logger_name}"; then
-        ___x_cmd_log_pr log warn "Logger Name should be match [0-9A-Za-z_]+ "
+        ___x_cmd_log_pr log error "Logger Name should be match [0-9A-Za-z_]+ "
         return 1
     fi
 

@@ -39,3 +39,16 @@ worker:debug "Curl Body is $(curl https://get.x-cmd.com)"       # curl will neve
 true
 x log :worker "Curl Body is $(curl https://get.x-cmd.com)"      # curl will happen
 ```
+
+## submodule的问题
+
+```bash
+true
+x log :yanfa
+
+function yanfa_release_add(){
+    x:trace yanfa/release/add
+    yanfa:log info hi
+}
+
+```

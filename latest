@@ -278,17 +278,17 @@ ___x_cmd_log_0(){
 
         if [ $# -gt 0 ]; then
             [ "$L" != "INF" ] || local ___X_CMD_LOG_C_MSG="\\033[1m"
-            printf "${timestamp}${C}[%s] <%s>: ${___X_CMD_TRACE_LINE_LOCAL+[$___X_CMD_TRACE_LINE_LOCAL]}\033[0m${___X_CMD_LOG_C_MSG:-"$C"}%s\033[0m\n" "$L" "$O" "$*"
+            printf "${timestamp}${C}[%s] <%s>: ${___X_CMD_TRACE_LINE_LOCAL+<$___X_CMD_TRACE_LINE_LOCAL> }\033[0m${___X_CMD_LOG_C_MSG:-"$C"}%s\033[0m\n" "$L" "$O" "$*"
         else
-            printf "${timestamp}${C}[%s] <%s>: ${___X_CMD_TRACE_LINE_LOCAL+[$___X_CMD_TRACE_LINE_LOCAL]}" "$L" "$O"
+            printf "${timestamp}${C}[%s] <%s>: ${___X_CMD_TRACE_LINE_LOCAL+<$___X_CMD_TRACE_LINE_LOCAL> }" "$L" "$O"
             cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; END{ printf("%s", "\033[0m"); }'
         fi
     else
         [ -z "$___X_CMD_LOG__TIMESTAMP_FORMAT" ] || timestamp="$(date "${___X_CMD_LOG__TIMESTAMP_FORMAT}") "
         if [ $# -gt 0 ]; then
-            printf "${timestamp}[%s] <%s>: ${___X_CMD_TRACE_LINE_LOCAL+[$___X_CMD_TRACE_LINE_LOCAL]}%s\n" "$L" "$O" "$*"
+            printf "${timestamp}[%s] <%s>: ${___X_CMD_TRACE_LINE_LOCAL+<$___X_CMD_TRACE_LINE_LOCAL> }%s\n" "$L" "$O" "$*"
         else
-            printf "${timestamp}[%s] <%s>: ${___X_CMD_TRACE_LINE_LOCAL+[$___X_CMD_TRACE_LINE_LOCAL]}" "$L" "$O"
+            printf "${timestamp}[%s] <%s>: ${___X_CMD_TRACE_LINE_LOCAL+<$___X_CMD_TRACE_LINE_LOCAL> }" "$L" "$O"
             cat | awk 'NR==1{ print($0) }; NR>=2{ print("> " $0); }; }'
         fi
     fi >&2

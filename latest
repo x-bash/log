@@ -157,11 +157,12 @@ ___x_cmd_log_level_code_to_level_name(){
 }
 
 ___x_cmd_log_set_level(){
+    x:trace x/log
     local logger_name="${1:?Provide loggername}"
 
     # TODO: how to check the logger_name is valid?
     if ! ___x_cmd_validenvname "${logger_name}"; then
-        ___x_cmd_log_pr log error "Logger Name should be match [0-9A-Za-z_]+ "
+        ___x_cmd_log_pr x error "Logger Name should be match [0-9A-Za-z_]+ "
         return 1
     fi
 
@@ -187,7 +188,7 @@ ___x_cmd_log_set_level(){
     fi
 
     # eval "$O:debug  \"Level of logger [\$logger_name] is set to [\$level]\""
-    ___x_cmd_log_pr log info "Level of logger [$logger_name] is set to [$level_name]"
+    ___x_cmd_log_pr x info "Level of logger [$logger_name] is set to [$level_name]"
 }
 
 ___x_cmd_log_get_level_name(){

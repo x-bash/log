@@ -1,6 +1,8 @@
 # shellcheck    shell=sh            disable=SC3043      # xrc
 # author:       Li Junhao           l@x-cmd.com
 
+xrc:mod log/lib/trace
+
 ___x_cmd_log() {
     case "$1" in
         :*)                                     ___x_cmd_log_pr "$@" ;;

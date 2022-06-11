@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 
 alias x:trace='{ local ___X_CMD_LOG_DEBUG="${___X_CMD_LOG_DEBUG}"; local ___X_CMD_LOG_TRACE_LINE_LOCAL="${___X_CMD_LOG_TRACE_LINE_LOCAL}"; } 2>/dev/null; ___x_cmd_log_trace'
+alias log:trace='{ local ___X_CMD_LOG_DEBUG="${___X_CMD_LOG_DEBUG}"; local ___X_CMD_LOG_TRACE_LINE_LOCAL="${___X_CMD_LOG_TRACE_LINE_LOCAL}"; } 2>/dev/null; ___x_cmd_log_trace'
 ___x_cmd_log_trace(){
     local old_trace_name="${___X_CMD_LOG_TRACE_LINE_LOCAL}"
     ___X_CMD_LOG_TRACE_LINE_LOCAL="$1"
@@ -32,17 +33,20 @@ ___x_cmd_log_trace(){
     fi
 }
 
-alias x.trace.dbgtrig=___x_cmd_log_trace_debugtrig
-___x_cmd_log_trace_debugtrig(){
-    ___X_CMD_LOG_TRACE_DEBUGTRIG=1
-}
+# alias x.trace.dbgtrig=___x_cmd_log_trace_debugtrig
+# alias log:trace:dbgtrig=___x_cmd_log_trace_debugtrig
+# ___x_cmd_log_trace_debugtrig(){
+#     ___X_CMD_LOG_TRACE_DEBUGTRIG=1
+# }
 
-alias x.trace.dbgtrig.stop=___x_cmd_log_trace_debugtrig_stop
-___x_cmd_log_trace_debugtrig_stop(){
-    ___X_CMD_LOG_TRACE_DEBUGTRIG=
-}
+# alias x.trace.dbgtrig.stop=___x_cmd_log_trace_debugtrig_stop
+# alias log:trace:dbgtrig:stop=___x_cmd_log_trace_debugtrig_stop
+# ___x_cmd_log_trace_debugtrig_stop(){
+#     ___X_CMD_LOG_TRACE_DEBUGTRIG=
+# }
 
 alias x:trace:evex=___x_cmd_log_trace_evex
+alias log:trace:evex=___x_cmd_log_trace_evex
 ___x_cmd_log_trace_evex(){
     if [ -z "$___X_CMD_LOG_DEBUG" ] && eval [ "\${___X_CMD_LOG__${___X_CMD_LOG_TRACE_LINE_LOCAL%%/*}:-2}" -gt 1 ]; then
         ___x_cmd_evex "$@"
@@ -54,6 +58,7 @@ ___x_cmd_log_trace_evex(){
 }
 
 alias x:trace:time=___x_cmd_log_trace_time
+alias log:trace:time=___x_cmd_log_trace_time
 ___x_cmd_log_trace_time(){
     if [ -z "$___X_CMD_LOG_DEBUG" ] && eval [ "\${___X_CMD_LOG__${___X_CMD_LOG_TRACE_LINE_LOCAL%%/*}:-2}" -gt 1 ]; then
         ___x_cmd_evex "$@"

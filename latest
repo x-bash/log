@@ -258,7 +258,6 @@ ___x_cmd_log_pr_debug(){
 }
 
 ___x_cmd_log_pr_info(){
-    echo 3333
     L=INF C="$___X_CMD_LOG_C_INFO"  ___x_cmd_log_0 "$@"
 }
 
@@ -273,7 +272,6 @@ ___x_cmd_log_pr_error(){
 ___x_cmd_log_0(){
     local IFS=" "
     local timestamp
-    echo 222
 
     # ${___X_CMD_TRACE_LINE_LOCAL+<${___X_CMD_TRACE_LINE_LOCAL#"$O"}>
     local track="${___X_CMD_TRACE_LINE_LOCAL}"

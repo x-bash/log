@@ -24,15 +24,29 @@ ___x_cmd_log() {
         run)                        shift;      ___x_cmd_log_run "$@" ;;
 
         *)
-            while [ "$#" -gt 0 ]; do
-                case "$1" in
-                    */*)                        ___x_cmd_log_set_level "${1%/*}" "${1#*/}" ;;
-                    +*)                         ___x_cmd_log_set_level "${1#+}" debug ;;
-                    -*)                         ___x_cmd_log_set_level "${1#-}" info ;;
-                    *)                          ___x_cmd_log_set_level "$1" info
-                esac
-                shift
+            local ___X_CMD_LOG___GLOBAL_MODE=1
+            local ___X_CMD_LOG___ARG
+            for ___X_CMD_LOG___ARG in "$@"; do
+                if [ "$___X_CMD_LOG___ARG" = -- ]; then
+                    ___X_CMD_LOG___GLOBAL_MODE=0
+                    break
+                fi
             done
+
+            if [ "$___X_CMD_LOG___GLOBAL_MODE" -eq 0 ]; then
+                ___x_cmd_log_run "$@"
+            else
+                while [ "$#" -gt 0 ]; do
+                    case "$1" in
+                        --)                         break ;;
+                        */*)                        ___x_cmd_log_set_level "${1%/*}" "${1#*/}" ;;
+                        +*)                         ___x_cmd_log_set_level "${1#+}" debug ;;
+                        -*)                         ___x_cmd_log_set_level "${1#-}" info ;;
+                        *)                          ___x_cmd_log_set_level "$1" info
+                    esac
+                    shift
+                done
+            fi
     esac
 }
 

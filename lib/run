@@ -1,8 +1,7 @@
 
 ___x_cmd_log_run(){
-    local ___X_CMD_LOG_RUN___ARG
-    for ___X_CMD_LOG_RUN___ARG in "$@"; do
-        case "$___X_CMD_LOG_RUN___ARG" in
+    while [ "$#" -gt 0 ]; do
+        case "$1" in
             --)     shift; break    ;;
 
             */*)    eval "local ${1%/*}" 2>/dev/null;   ___x_cmd_log_set_level "${1%/*}" "${1#*/}" ;;
@@ -14,3 +13,33 @@ ___x_cmd_log_run(){
 
     "$@"
 }
+
+___x_cmd_log_default(){
+    local ___X_CMD_LOG___GLOBAL_MODE=1
+    local ___X_CMD_LOG___ARG
+    for ___X_CMD_LOG___ARG in "$@"; do
+        if [ "$___X_CMD_LOG___ARG" = -- ]; then
+            ___X_CMD_LOG___GLOBAL_MODE=0
+            break
+        fi
+    done
+
+    if [ "$___X_CMD_LOG___GLOBAL_MODE" -eq 0 ]; then
+        ___x_cmd_log_run "$@"
+        return
+    fi
+
+    while [ "$#" -gt 0 ]; do
+        case "$1" in
+            --)                         break ;;
+            */*)                        ___x_cmd_log_set_level "${1%/*}" "${1#*/}" ;;
+            +*)                         ___x_cmd_log_set_level "${1#+}" debug ;;
+            -*)                         ___x_cmd_log_set_level "${1#-}" info ;;
+            *)                          ___x_cmd_log_set_level "$1" info
+        esac
+        shift
+    done
+}
+
+# LOG_ENABLE=-zuz,+a x zuz
+x log run zuz/warn  --  x zuz

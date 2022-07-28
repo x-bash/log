@@ -1,7 +1,7 @@
 # shellcheck    shell=sh            disable=SC3043      # xrc
 # author:       Li Junhao           l@x-cmd.com
 
-xrc:mod log/lib/trace
+xrc:mod log/lib/trace log/lib/run
 
 ___x_cmd_log() {
     case "$1" in
@@ -20,6 +20,9 @@ ___x_cmd_log() {
 
         timestamp)                  shift;      ___x_cmd_log_timestamp "$@" ;;
         view)                       shift;      ___x_cmd_log_view "$@" ;;
+
+        run)                        shift;      ___x_cmd_log_run "$@" ;;
+
         *)
             while [ "$#" -gt 0 ]; do
                 case "$1" in

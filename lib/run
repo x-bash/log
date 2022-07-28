@@ -1,0 +1,16 @@
+
+___x_cmd_log_run(){
+    local ___X_CMD_LOG_RUN___ARG
+    for ___X_CMD_LOG_RUN___ARG in "$@"; do
+        case "$___X_CMD_LOG_RUN___ARG" in
+            --)     shift; break    ;;
+
+            */*)    eval "local ${1%/*}" 2>/dev/null;   ___x_cmd_log_set_level "${1%/*}" "${1#*/}" ;;
+            +*)     eval "local ${1#+}" 2>/dev/null;    ___x_cmd_log_set_level "${1#+}" debug ;;
+            -*)     eval "local ${1#-}" 2>/dev/null;    ___x_cmd_log_set_level "${1#-}" info ;;
+            *)      eval "local ${1}" 2>/dev/null;      ___x_cmd_log_set_level "$1" info ;;
+        esac
+    done
+
+    "$@"
+}

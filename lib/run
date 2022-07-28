@@ -42,4 +42,4 @@ ___x_cmd_log_default(){
 }
 
 # LOG_ENABLE=-zuz,+a x zuz
-x log run zuz/warn  --  x zuz
+# x log run zuz/warn  --  x zuz

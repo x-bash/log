@@ -2,13 +2,14 @@
 ___x_cmd_log_run(){
     while [ "$#" -gt 0 ]; do
         case "$1" in
-            --)     shift; break    ;;
+            --)     shift;                              break    ;;
 
             */*)    eval "local ${1%/*}" 2>/dev/null;   ___x_cmd_log_set_level "${1%/*}" "${1#*/}" ;;
             +*)     eval "local ${1#+}" 2>/dev/null;    ___x_cmd_log_set_level "${1#+}" debug ;;
             -*)     eval "local ${1#-}" 2>/dev/null;    ___x_cmd_log_set_level "${1#-}" info ;;
             *)      eval "local ${1}" 2>/dev/null;      ___x_cmd_log_set_level "$1" info ;;
         esac
+        shift
     done
 
     "$@"
@@ -31,11 +32,10 @@ ___x_cmd_log_default(){
 
     while [ "$#" -gt 0 ]; do
         case "$1" in
-            --)                         break ;;
-            */*)                        ___x_cmd_log_set_level "${1%/*}" "${1#*/}" ;;
-            +*)                         ___x_cmd_log_set_level "${1#+}" debug ;;
-            -*)                         ___x_cmd_log_set_level "${1#-}" info ;;
-            *)                          ___x_cmd_log_set_level "$1" info
+            */*)                                        ___x_cmd_log_set_level "${1%/*}" "${1#*/}" ;;
+            +*)                                         ___x_cmd_log_set_level "${1#+}" debug ;;
+            -*)                                         ___x_cmd_log_set_level "${1#-}" info ;;
+            *)                                          ___x_cmd_log_set_level "$1" info
         esac
         shift
     done

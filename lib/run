@@ -1,6 +1,5 @@
 
 ___x_cmd_log_run(){
-    local ___X_CMD_LOG__x=3
     while [ "$#" -gt 0 ]; do
         case "$1" in
             --)     shift;                              break    ;;
